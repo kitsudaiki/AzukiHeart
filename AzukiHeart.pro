@@ -95,8 +95,14 @@ LIBS += -lcryptopp -lssl -lsqlite3 -luuid -lcrypto
 INCLUDEPATH += $$PWD \
                src
 
-SOURCES += src/main.cpp
+SOURCES += src/main.cpp \
+    src/api/system_info/get_system_info.cpp \
+    src/azuki_root.cpp
 
 HEADERS += \
+    src/api/blossom_initializing.h \
+    src/api/system_info/get_system_info.h \
     src/args.h \
+    src/azuki_root.h \
+    src/callbacks.h \
     src/config.h
