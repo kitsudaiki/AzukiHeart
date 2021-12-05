@@ -31,9 +31,9 @@
 using namespace Kitsunemimi::Sakura;
 
 GetSystemInfo::GetSystemInfo()
-    : Kitsunemimi::Sakura::Blossom()
+    : Kitsunemimi::Sakura::Blossom("Get all available information of the local system.")
 {
-    registerOutputField("info");
+    registerOutputField("info", SAKURA_MAP_TYPE, "All available information of the local system.");
 }
 
 /**
