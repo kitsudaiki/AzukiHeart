@@ -180,6 +180,13 @@ GetThreadMapping::runTask(BlossomLeaf &blossomLeaf,
         }
     }
 
+
+    if(requestComponent(completeMap, "torii", request, error) == false)
+    {
+        status.statusCode = Kitsunemimi::Hanami::INTERNAL_SERVER_ERROR_RTYPE;
+        return false;
+    }
+
     blossomLeaf.output.insert("thread_map", completeMap);
 
     return true;
