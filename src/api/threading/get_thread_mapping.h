@@ -1,5 +1,5 @@
 /**
- * @file        blossom_initializing.h
+ * @file        create_token.h
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,24 +20,22 @@
  *      limitations under the License.
  */
 
-#ifndef BLOSSOM_INITIALIZING_H
-#define BLOSSOM_INITIALIZING_H
+#ifndef GETTHREADMAPPING_H
+#define GETTHREADMAPPING_H
 
-#include <libKitsunemimiSakuraLang/sakura_lang_interface.h>
-#include <libKitsunemimiCommon/logger.h>
+#include <libKitsunemimiSakuraLang/blossom.h>
 
-#include <api/system_info/get_system_info.h>
-#include <api/threading/get_thread_mapping.h>
-
-using Kitsunemimi::Sakura::SakuraLangInterface;
-
-void
-initBlossoms()
+class GetThreadMapping
+        : public Kitsunemimi::Sakura::Blossom
 {
-    SakuraLangInterface* interface = SakuraLangInterface::getInstance();
+public:
+    GetThreadMapping();
 
-    assert(interface->addBlossom("system", "get_info", new GetSystemInfo()));
-    assert(interface->addBlossom("threading", "get_mapping", new GetThreadMapping()));
-}
+protected:
+    bool runTask(Kitsunemimi::Sakura::BlossomLeaf &blossomLeaf,
+                 const Kitsunemimi::DataMap &context,
+                 Kitsunemimi::Sakura::BlossomStatus &status,
+                 Kitsunemimi::ErrorContainer &error);
+};
 
-#endif // BLOSSOM_INITIALIZING_H
+#endif // GETTHREADMAPPING_H

@@ -31,9 +31,14 @@
 using namespace Kitsunemimi::Sakura;
 
 GetSystemInfo::GetSystemInfo()
-    : Kitsunemimi::Sakura::Blossom("Get all available information of the local system.")
+    : Kitsunemimi::Sakura::Blossom("Get all available information of the local system.\n"
+                                   "    - Topology of the cpu-resources\n"
+                                   "    - Speed of the cpu\n"
+                                   "    - Energy-consumption of the cpu list")
 {
-    registerOutputField("info", SAKURA_MAP_TYPE, "All available information of the local system.");
+    registerOutputField("info",
+                        SAKURA_MAP_TYPE,
+                        "All available information of the local system.");
 }
 
 /**

@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
     }
 
     // initialize server and connections based on the config-file
-    const std::vector<std::string> groupNames = {};
+    const std::vector<std::string> groupNames = {"misaka", "sagiri", "kyouko"};
     if(HanamiMessaging::getInstance()->initialize("azuki",
                                                   groupNames,
                                                   nullptr,
@@ -56,6 +56,7 @@ int main(int argc, char *argv[])
         return 1;
     }
 
+    // init root-object
     AzukiRoot rootObj;
     if(rootObj.init() == false) {
         return 1;

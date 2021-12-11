@@ -97,11 +97,13 @@ INCLUDEPATH += $$PWD \
 
 SOURCES += src/main.cpp \
     src/api/system_info/get_system_info.cpp \
+    src/api/threading/get_thread_mapping.cpp \
     src/azuki_root.cpp
 
 HEADERS += \
     src/api/blossom_initializing.h \
     src/api/system_info/get_system_info.h \
+    src/api/threading/get_thread_mapping.h \
     src/args.h \
     src/azuki_root.h \
     src/callbacks.h \
