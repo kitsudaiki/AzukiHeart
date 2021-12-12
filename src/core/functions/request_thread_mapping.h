@@ -1,5 +1,5 @@
 /**
- * @file        misaka_root.h
+ * @file        request_thread_mapping.h
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,20 +20,13 @@
  *      limitations under the License.
  */
 
-#ifndef AZUKIROOT_H
-#define AZUKIROOT_H
+#ifndef REQUESTTHREADMAPPING_H
+#define REQUESTTHREADMAPPING_H
 
-class ThreadBinder;
+#include <libKitsunemimiCommon/common_items/data_items.h>
+#include <libKitsunemimiCommon/logger.h>
 
-class AzukiRoot
-{
-public:
-    AzukiRoot();
+Kitsunemimi::DataMap* requestThreadMapping(const std::string &token,
+                                           Kitsunemimi::ErrorContainer &error);
 
-    bool init();
-
-private:
-    ThreadBinder* m_threadBinder = nullptr;
-};
-
-#endif // AZUKIROOT_H
+#endif // REQUESTTHREADMAPPING_H

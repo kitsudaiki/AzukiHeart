@@ -1,5 +1,5 @@
 /**
- * @file        misaka_root.h
+ * @file        thread_binder.h
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,20 +20,34 @@
  *      limitations under the License.
  */
 
-#ifndef AZUKIROOT_H
-#define AZUKIROOT_H
+#ifndef THREADBINDER_H
+#define THREADBINDER_H
 
-class ThreadBinder;
+#include <libKitsunemimiCommon/threading/thread.h>
 
-class AzukiRoot
+namespace Kitsunemimi {
+namespace Hanami {
+struct RequestMessage;
+}
+}
+
+class ThreadBinder
+        : public Kitsunemimi::Thread
 {
 public:
-    AzukiRoot();
+    ThreadBinder();
 
-    bool init();
+protected:
+    void run();
 
 private:
-    ThreadBinder* m_threadBinder = nullptr;
+    void createInternalToken();
+    void changeInternalCoreIds(const std::vector<std::string> &threadNames);
+    void changeRemoteCoreIds(const std::string &component,
+                             Kitsunemimi::Hanami::RequestMessage &request,
+                             const std::vector<std::string> &threadNames);
+
+    std::string m_token = "";
 };
 
-#endif // AZUKIROOT_H
+#endif // THREADBINDER_H

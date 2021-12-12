@@ -80,6 +80,11 @@ LIBS += -L../libKitsunemimiIni/src/debug -lKitsunemimiIni
 LIBS += -L../libKitsunemimiIni/src/release -lKitsunemimiIni
 INCLUDEPATH += ../libKitsunemimiIni/include
 
+LIBS += -L../libKitsunemimiJwt/src -lKitsunemimiJwt
+LIBS += -L../libKitsunemimiJwt/src/debug -lKitsunemimiJwt
+LIBS += -L../libKitsunemimiJwti/src/release -lKitsunemimiJwt
+INCLUDEPATH += ../libKitsunemimiJwt/include
+
 LIBS += -L../libKitsunemimiCrypto/src -lKitsunemimiCrypto
 LIBS += -L../libKitsunemimiCrypto/src/debug -lKitsunemimiCrypto
 LIBS += -L../libKitsunemimiCrypto/src/release -lKitsunemimiCrypto
@@ -98,7 +103,9 @@ INCLUDEPATH += $$PWD \
 SOURCES += src/main.cpp \
     src/api/system_info/get_system_info.cpp \
     src/api/threading/get_thread_mapping.cpp \
-    src/azuki_root.cpp
+    src/azuki_root.cpp \
+    src/core/functions/request_thread_mapping.cpp \
+    src/core/thread_binder.cpp
 
 HEADERS += \
     src/api/blossom_initializing.h \
@@ -107,4 +114,6 @@ HEADERS += \
     src/args.h \
     src/azuki_root.h \
     src/callbacks.h \
-    src/config.h
+    src/config.h \
+    src/core/functions/request_thread_mapping.h \
+    src/core/thread_binder.h

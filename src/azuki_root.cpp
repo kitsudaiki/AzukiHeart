@@ -22,10 +22,11 @@
 
 #include "azuki_root.h"
 
+#include <api/blossom_initializing.h>
+#include <core/thread_binder.h>
+
 #include <libKitsunemimiConfig/config_handler.h>
 #include <libKitsunemimiCommon/files/text_file.h>
-
-#include <api/blossom_initializing.h>
 
 AzukiRoot::AzukiRoot() {}
 
@@ -37,6 +38,9 @@ bool
 AzukiRoot::init()
 {
     initBlossoms();
+
+    m_threadBinder = new ThreadBinder();
+    m_threadBinder->startThread();
 
     return true;
 }
