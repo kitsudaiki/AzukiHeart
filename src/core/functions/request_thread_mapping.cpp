@@ -63,10 +63,11 @@ requestComponent(Kitsunemimi::DataMap* completeMap,
         return false;
     }
 
-    std::string rstDocu;
-    Kitsunemimi::DataMap* compMap = jsonItem.get("thread_map").getItemContent()->copy()->toMap();
+    if(jsonItem.get("thread_map").getItemContent()->isMap() == false) {
+        return false;
+    }
 
-    completeMap->insert(component, compMap);
+    completeMap->insert(component, jsonItem.get("thread_map").getItemContent()->copy()->toMap());
 
     return true;
 }
@@ -79,7 +80,7 @@ requestComponent(Kitsunemimi::DataMap* completeMap,
  */
 bool
 makeInternalRequest(Kitsunemimi::DataMap* completeMap,
-                    Kitsunemimi::ErrorContainer &error)
+                    Kitsunemimi::ErrorContainer &)
 {
     Kitsunemimi::ThreadHandler* threadHandler = Kitsunemimi::ThreadHandler::getInstance();
     const std::vector<std::string> names = threadHandler->getRegisteredNames();
@@ -117,48 +118,45 @@ requestThreadMapping(const std::string &token,
     Kitsunemimi::DataMap* completeMap = new Kitsunemimi::DataMap();
     SupportedComponents* scomp = SupportedComponents::getInstance();
 
+    //----------------------------------------------------------------------------------------------
     if(makeInternalRequest(completeMap, error) == false) {
         return completeMap;
     }
-
-    if(scomp->support[Kitsunemimi::Hanami::KYOUKO])
+    //----------------------------------------------------------------------------------------------
+    if(scomp->support[Kitsunemimi::Hanami::KYOUKO]
+            && requestComponent(completeMap, "kyouko", request, error) == false)
     {
-        if(requestComponent(completeMap, "kyouko", request, error) == false) {
-            return completeMap;
-        }
+        return completeMap;
     }
-
-    if(scomp->support[Kitsunemimi::Hanami::MISAKA])
+    //----------------------------------------------------------------------------------------------
+    if(scomp->support[Kitsunemimi::Hanami::MISAKA]
+            && requestComponent(completeMap, "misaka", request, error) == false)
     {
-        if(requestComponent(completeMap, "misaka", request, error) == false) {
-            return completeMap;
-        }
+        return completeMap;
     }
-
-    if(scomp->support[Kitsunemimi::Hanami::SAGIRI])
+    //----------------------------------------------------------------------------------------------
+    if(scomp->support[Kitsunemimi::Hanami::SAGIRI]
+            && requestComponent(completeMap, "sagiri", request, error) == false)
     {
-        if(requestComponent(completeMap, "sagiri", request, error) == false) {
-            return completeMap;
-        }
+        return completeMap;
     }
-
-    if(scomp->support[Kitsunemimi::Hanami::NAGATO])
+    //----------------------------------------------------------------------------------------------
+    if(scomp->support[Kitsunemimi::Hanami::NAGATO]
+            && requestComponent(completeMap, "nagato", request, error) == false)
     {
-        if(requestComponent(completeMap, "nagato", request, error) == false) {
-            return completeMap;
-        }
+        return completeMap;
     }
-
-    if(scomp->support[Kitsunemimi::Hanami::IZUNA])
+    //----------------------------------------------------------------------------------------------
+    if(scomp->support[Kitsunemimi::Hanami::IZUNA]
+            && requestComponent(completeMap, "izuna", request, error) == false)
     {
-        if(requestComponent(completeMap, "izuna", request, error) == false) {
-            return completeMap;
-        }
+        return completeMap;
     }
-
+    //----------------------------------------------------------------------------------------------
     if(requestComponent(completeMap, "torii", request, error) == false) {
         return completeMap;
     }
+    //----------------------------------------------------------------------------------------------
 
     return completeMap;
 }

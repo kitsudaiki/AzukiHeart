@@ -42,10 +42,11 @@ protected:
 
 private:
     void createInternalToken();
-    void changeInternalCoreIds(const std::vector<std::string> &threadNames);
+    bool changeInternalCoreIds(const std::vector<std::string> &threadNames, const long coreId);
     void changeRemoteCoreIds(const std::string &component,
                              Kitsunemimi::Hanami::RequestMessage &request,
-                             const std::vector<std::string> &threadNames);
+                             const std::vector<std::string> &threadNames,
+                             const long coreId);
 
     std::string m_token = "";
 };

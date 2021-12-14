@@ -26,6 +26,8 @@
 #include <libKitsunemimiSakuraLang/sakura_lang_interface.h>
 #include <libKitsunemimiCommon/logger.h>
 
+#include <libKitsunemimiHanamiEndpoints/endpoint.h>
+
 #include <api/system_info/get_system_info.h>
 #include <api/threading/get_thread_mapping.h>
 
@@ -34,10 +36,22 @@ using Kitsunemimi::Sakura::SakuraLangInterface;
 void
 initBlossoms()
 {
+    Kitsunemimi::Hanami::Endpoint* endpoints = Kitsunemimi::Hanami::Endpoint::getInstance();
     SakuraLangInterface* interface = SakuraLangInterface::getInstance();
 
     assert(interface->addBlossom("system", "get_info", new GetSystemInfo()));
+    assert(endpoints->addEndpoint("system_info",
+                                  Kitsunemimi::Hanami::GET_TYPE,
+                                  Kitsunemimi::Hanami::BLOSSOM_TYPE,
+                                  "system",
+                                  "get_info"));
+
     assert(interface->addBlossom("threading", "get_mapping", new GetThreadMapping()));
+    assert(endpoints->addEndpoint("threading",
+                                  Kitsunemimi::Hanami::GET_TYPE,
+                                  Kitsunemimi::Hanami::BLOSSOM_TYPE,
+                                  "threading",
+                                  "get_mapping"));
 }
 
 #endif // BLOSSOM_INITIALIZING_H

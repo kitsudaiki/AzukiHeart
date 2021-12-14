@@ -38,30 +38,44 @@ ThreadBinder::ThreadBinder()
 }
 
 /**
- * @brief ThreadBinder::changeInternalCoreIds
- * @param threadNames
+ * @brief change core-ids of a thread of azuki itself
+ *
+ * @param threadNames name of the thread-type
+ * @param coreId is of the core (physical thread) to bind to
+ *
+ * @return true, if successfull, false if core-id is out-of-range
  */
-void
-ThreadBinder::changeInternalCoreIds(const std::vector<std::string> &threadNames)
+bool
+ThreadBinder::changeInternalCoreIds(const std::vector<std::string> &threadNames,
+                                    const long coreId)
 {
     Kitsunemimi::ThreadHandler* threadHandler = Kitsunemimi::ThreadHandler::getInstance();
     for(const std::string &name : threadNames)
     {
         const std::vector<Kitsunemimi::Thread*> threads = threadHandler->getThreads(name);
-        for(Kitsunemimi::Thread* thread : threads) {
-            thread->bindThreadToCore(0);
+        for(Kitsunemimi::Thread* thread : threads)
+        {
+            if(thread->bindThreadToCore(coreId) == false) {
+                return false;
+            }
         }
     }
+
+    return true;
 }
 
 /**
  * @brief ThreadBinder::changeRemoteCoreIds
+ * @param component
+ * @param request
  * @param threadNames
+ * @param coreId
  */
 void
 ThreadBinder::changeRemoteCoreIds(const std::string &component,
                                   Kitsunemimi::Hanami::RequestMessage &request,
-                                  const std::vector<std::string> &threadNames)
+                                  const std::vector<std::string> &threadNames,
+                                  const long coreId)
 {
     Kitsunemimi::Hanami::HanamiMessaging* msg = Kitsunemimi::Hanami::HanamiMessaging::getInstance();
     Kitsunemimi::Hanami::ResponseMessage response;
@@ -70,8 +84,13 @@ ThreadBinder::changeRemoteCoreIds(const std::string &component,
     {
         Kitsunemimi::ErrorContainer error;
 
-        request.inputValues = "{ \"token\" : \"" + m_token + "\", \"core_id\":0,";
-        request.inputValues.append("\"thread_name\": \"" + name + "\"}");
+        request.inputValues = "{ \"token\" : \""
+                              + m_token
+                              + "\", \"core_id\":"
+                              + std::to_string(coreId)
+                              + ",\"thread_name\": \""
+                              + name
+                              + "\"}";
 
         if(msg->triggerSakuraFile(component, response, request, error) == false) {
             LOG_ERROR(error);
@@ -91,6 +110,8 @@ ThreadBinder::changeRemoteCoreIds(const std::string &component,
 void
 ThreadBinder::run()
 {
+    long coreId = 0;
+
     while(m_abort == false)
     {
         Kitsunemimi::ErrorContainer error;
@@ -112,9 +133,9 @@ ThreadBinder::run()
         {
             const std::vector<std::string> threadNames = it->second->toMap()->getKeys();
             if(it->first == "azuki") {
-                changeInternalCoreIds(threadNames);
+                changeInternalCoreIds(threadNames, coreId);
             } else {
-                changeRemoteCoreIds(it->first, request, threadNames);
+                changeRemoteCoreIds(it->first, request, threadNames, coreId);
             }
         }
 
