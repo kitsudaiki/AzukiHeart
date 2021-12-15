@@ -23,6 +23,8 @@
 #ifndef AZUKIROOT_H
 #define AZUKIROOT_H
 
+#include <string>
+
 class ThreadBinder;
 
 class AzukiRoot
@@ -31,6 +33,8 @@ public:
     AzukiRoot();
 
     bool init();
+
+    static std::string* componentToken;
 
 private:
     ThreadBinder* m_threadBinder = nullptr;

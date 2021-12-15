@@ -27,6 +27,17 @@
 
 #include <libKitsunemimiConfig/config_handler.h>
 #include <libKitsunemimiCommon/files/text_file.h>
+#include <libKitsunemimiJson/json_item.h>
+#include <libKitsunemimiJwt/jwt.h>
+
+#include <libKitsunemimiHanamiCommon/component_support.h>
+#include <libKitsunemimiHanamiMessaging/hanami_messaging.h>
+
+using namespace Kitsunemimi::Sakura;
+using Kitsunemimi::Hanami::SupportedComponents;
+using Kitsunemimi::Sakura::SakuraLangInterface;
+
+std::string* AzukiRoot::componentToken = nullptr;
 
 AzukiRoot::AzukiRoot() {}
 
@@ -39,8 +50,57 @@ AzukiRoot::init()
 {
     initBlossoms();
 
+    SupportedComponents* scomp = SupportedComponents::getInstance();
+
+    Kitsunemimi::Hanami::RequestMessage request;
+    request.id = "token/internal";
+    request.httpType = Kitsunemimi::Hanami::GET_TYPE;
+    request.inputValues = "{\"service_name\":\"azuki\"}";
+    Kitsunemimi::ErrorContainer error;
+
+    if(scomp->support[Kitsunemimi::Hanami::MISAKA])
+    {
+        Kitsunemimi::Hanami::HanamiMessaging* msg = Kitsunemimi::Hanami::HanamiMessaging::getInstance();
+        Kitsunemimi::Hanami::ResponseMessage response;
+
+        if(msg->triggerSakuraFile("misaka", response, request, error) == false)
+        {
+            LOG_ERROR(error);
+            return false;
+        }
+
+        if(response.success == false) {
+            return false;
+        }
+        Kitsunemimi::Json::JsonItem jsonItem;
+        if(jsonItem.parse(response.responseContent, error) == false)
+        {
+            LOG_ERROR(error);
+            return false;
+        }
+
+        componentToken = new std::string();
+        *componentToken = jsonItem.getItemContent()->toMap()->getStringByKey("token");
+        if(*componentToken == "") {
+            return false;
+        }
+    }
+    else
+    {
+        const std::string tokenKeyStr = "-";
+        CryptoPP::SecByteBlock tokenKey((unsigned char*)tokenKeyStr.c_str(), tokenKeyStr.size());
+        Kitsunemimi::Jwt::Jwt jwt(tokenKey);
+
+        Kitsunemimi::Json::JsonItem jsonItem;
+        jsonItem.insert("service_name", "azuki");
+        jwt.create_HS256_Token(*componentToken, jsonItem, 0);
+    }
+
+
+
     m_threadBinder = new ThreadBinder();
     m_threadBinder->startThread();
+
 
     return true;
 }

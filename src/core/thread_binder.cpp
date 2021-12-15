@@ -21,6 +21,7 @@
  */
 
 #include "thread_binder.h"
+#include <azuki_root.h>
 #include <core/functions/request_thread_mapping.h>
 
 #include <libKitsunemimiHanamiCommon/enums.h>
@@ -34,7 +35,6 @@
 ThreadBinder::ThreadBinder()
     : Kitsunemimi::Thread("Azuki_ThreadBinder")
 {
-    createInternalToken();
 }
 
 /**
@@ -85,7 +85,7 @@ ThreadBinder::changeRemoteCoreIds(const std::string &component,
         Kitsunemimi::ErrorContainer error;
 
         request.inputValues = "{ \"token\" : \""
-                              + m_token
+                              + *AzukiRoot::componentToken
                               + "\", \"core_id\":"
                               + std::to_string(coreId)
                               + ",\"thread_name\": \""
@@ -115,7 +115,8 @@ ThreadBinder::run()
     while(m_abort == false)
     {
         Kitsunemimi::ErrorContainer error;
-        Kitsunemimi::DataMap* threadMapping = requestThreadMapping(m_token, error);
+        Kitsunemimi::DataMap* threadMapping = requestThreadMapping(*AzukiRoot::componentToken,
+                                                                   error);
 
         // some debug-output
         //std::cout<<"#################################################################"<<std::endl;
@@ -142,16 +143,4 @@ ThreadBinder::run()
         delete threadMapping;
         sleep(10);
     }
-}
-
-void
-ThreadBinder::createInternalToken()
-{
-    // TODO: request token from misaka
-    const std::string tokenKeyString = "-";
-    CryptoPP::SecByteBlock tokenKey((unsigned char*)tokenKeyString.c_str(), tokenKeyString.size());
-    Kitsunemimi::Jwt::Jwt jwt(tokenKey);
-
-    Kitsunemimi::Json::JsonItem jsonItem;
-    jwt.create_HS256_Token(m_token, jsonItem, 0);
 }
