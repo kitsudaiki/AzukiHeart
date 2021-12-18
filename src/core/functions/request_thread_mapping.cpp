@@ -90,8 +90,14 @@ makeInternalRequest(Kitsunemimi::DataMap* completeMap,
     {
         const std::vector<Kitsunemimi::Thread*> threads = threadHandler->getThreads(name);
         Kitsunemimi::DataArray* threadArray = new Kitsunemimi::DataArray();
-        for(Kitsunemimi::Thread* thread : threads) {
-            threadArray->append(new Kitsunemimi::DataValue(thread->getCoreId()));
+        for(Kitsunemimi::Thread* thread : threads)
+        {
+            const std::vector<uint64_t> coreIds = thread->getCoreIds();
+            Kitsunemimi::DataArray* cores = new Kitsunemimi::DataArray();
+            for(const uint64_t coreId : coreIds) {
+                cores->append(new Kitsunemimi::DataValue(static_cast<long>(coreId)));
+            }
+            threadArray->append(cores);
         }
         result->insert(name, threadArray);
     }
