@@ -35,7 +35,6 @@ using namespace Kitsunemimi::Sakura;
 using Kitsunemimi::Hanami::SupportedComponents;
 using Kitsunemimi::Sakura::SakuraLangInterface;
 
-
 /**
  * @brief handleResponse
  * @param completeDocumentation

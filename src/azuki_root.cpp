@@ -96,11 +96,8 @@ AzukiRoot::init()
         jwt.create_HS256_Token(*componentToken, jsonItem, 0);
     }
 
-
-
     m_threadBinder = new ThreadBinder();
     m_threadBinder->startThread();
-
 
     return true;
 }
