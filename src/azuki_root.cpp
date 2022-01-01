@@ -35,6 +35,7 @@
 
 using namespace Kitsunemimi::Sakura;
 using Kitsunemimi::Hanami::SupportedComponents;
+using Kitsunemimi::Hanami::HanamiMessaging;
 using Kitsunemimi::Sakura::SakuraLangInterface;
 
 std::string* AzukiRoot::componentToken = nullptr;
@@ -53,14 +54,14 @@ AzukiRoot::init()
     SupportedComponents* scomp = SupportedComponents::getInstance();
 
     Kitsunemimi::Hanami::RequestMessage request;
-    request.id = "token/internal";
+    request.id = "v1/token/internal";
     request.httpType = Kitsunemimi::Hanami::GET_TYPE;
     request.inputValues = "{\"service_name\":\"azuki\"}";
     Kitsunemimi::ErrorContainer error;
 
     if(scomp->support[Kitsunemimi::Hanami::MISAKA])
     {
-        Kitsunemimi::Hanami::HanamiMessaging* msg = Kitsunemimi::Hanami::HanamiMessaging::getInstance();
+        HanamiMessaging* msg = HanamiMessaging::getInstance();
         Kitsunemimi::Hanami::ResponseMessage response;
 
         if(msg->triggerSakuraFile("misaka", response, request, error) == false)
