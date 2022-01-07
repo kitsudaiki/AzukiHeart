@@ -20,8 +20,8 @@
  *      limitations under the License.
  */
 
-#ifndef THREADBINDER_H
-#define THREADBINDER_H
+#ifndef AZUKIHEART_THREADBINDER_H
+#define AZUKIHEART_THREADBINDER_H
 
 #include <libKitsunemimiCommon/threading/thread.h>
 
@@ -48,4 +48,4 @@ private:
                              const long coreId);
 };
 
-#endif // THREADBINDER_H
+#endif // AZUKIHEART_THREADBINDER_H

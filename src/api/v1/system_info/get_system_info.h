@@ -20,8 +20,8 @@
  *      limitations under the License.
  */
 
-#ifndef GETSYSTEMINFO_H
-#define GETSYSTEMINFO_H
+#ifndef AZUKIHEART_GETSYSTEMINFO_H
+#define AZUKIHEART_GETSYSTEMINFO_H
 
 #include <libKitsunemimiSakuraLang/blossom.h>
 
@@ -39,4 +39,4 @@ protected:
 };
 
 
-#endif // GETSYSTEMINFO_H
+#endif // AZUKIHEART_GETSYSTEMINFO_H

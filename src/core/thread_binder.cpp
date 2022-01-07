@@ -38,12 +38,12 @@ ThreadBinder::ThreadBinder()
 }
 
 /**
- * @brief change core-ids of a thread of azuki itself
+ * @brief change core-ids of the threads of azuki itself
  *
  * @param threadNames name of the thread-type
  * @param coreId is of the core (physical thread) to bind to
  *
- * @return true, if successfull, false if core-id is out-of-range
+ * @return true, if successful, false if core-id is out-of-range
  */
 bool
 ThreadBinder::changeInternalCoreIds(const std::vector<std::string> &threadNames,
@@ -65,11 +65,12 @@ ThreadBinder::changeInternalCoreIds(const std::vector<std::string> &threadNames,
 }
 
 /**
- * @brief ThreadBinder::changeRemoteCoreIds
- * @param component
- * @param request
- * @param threadNames
- * @param coreId
+ * @brief tell another component a new thread-binding
+ *
+ * @param component name of the component which has to be modified
+ * @param request base-request for the trigger
+ * @param threadNames name of the thread-type
+ * @param coreId is of the core (physical thread) to bind to
  */
 void
 ThreadBinder::changeRemoteCoreIds(const std::string &component,
@@ -78,24 +79,23 @@ ThreadBinder::changeRemoteCoreIds(const std::string &component,
                                   const long coreId)
 {
     Kitsunemimi::Hanami::HanamiMessaging* msg = Kitsunemimi::Hanami::HanamiMessaging::getInstance();
-    Kitsunemimi::Hanami::ResponseMessage response;
 
     for(const std::string &name : threadNames)
     {
         Kitsunemimi::ErrorContainer error;
+        Kitsunemimi::Hanami::ResponseMessage response;
 
-        request.inputValues = "{ \"token\" : \""
-                              + *AzukiRoot::componentToken
-                              + "\", \"core_id\":"
-                              + std::to_string(coreId)
-                              + ",\"thread_name\": \""
-                              + name
-                              + "\"}";
+        // set values for thread-binding
+        request.inputValues = "{ \"token\":\""       + *AzukiRoot::componentToken + "\""
+                              ", \"core_id\":"       + std::to_string(coreId)     + ""
+                              ", \"thread_name\":\"" + name                       + "\"}";
 
+        // trigger remote-action for thread-binding
         if(msg->triggerSakuraFile(component, response, request, error) == false) {
             LOG_ERROR(error);
         }
 
+        // check response
         if(response.success == false)
         {
             error.addMeesage(response.responseContent);
@@ -115,21 +115,27 @@ ThreadBinder::run()
     while(m_abort == false)
     {
         Kitsunemimi::ErrorContainer error;
-        Kitsunemimi::DataMap* threadMapping = requestThreadMapping(*AzukiRoot::componentToken,
-                                                                   error);
+        Kitsunemimi::DataMap completeMap;
 
-        // some debug-output
+        // get thread-mapping of all components
+        if(requestThreadMapping(&completeMap, *AzukiRoot::componentToken, error) == false) {
+            LOG_ERROR(error);
+        }
+
+        // debug-output
         //std::cout<<"#################################################################"<<std::endl;
         //std::cout<<threadMapping->toString(true)<<std::endl;
         //std::cout<<"#################################################################"<<std::endl;
 
+        // create request for thread-binding
         Kitsunemimi::Hanami::RequestMessage request;
         request.id = "bind_thread_to_core";
         request.httpType = Kitsunemimi::Hanami::POST_TYPE;
 
+        // update thread-binding for all components
         std::map<std::string,Kitsunemimi:: DataItem*>::const_iterator it;
-        for(it = threadMapping->map.begin();
-            it != threadMapping->map.end();
+        for(it = completeMap.map.begin();
+            it != completeMap.map.end();
             it++)
         {
             const std::vector<std::string> threadNames = it->second->toMap()->getKeys();
@@ -140,7 +146,6 @@ ThreadBinder::run()
             }
         }
 
-        delete threadMapping;
         sleep(10);
     }
 }

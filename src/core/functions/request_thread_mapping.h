@@ -20,13 +20,14 @@
  *      limitations under the License.
  */
 
-#ifndef REQUESTTHREADMAPPING_H
-#define REQUESTTHREADMAPPING_H
+#ifndef AZUKIHEART_REQUESTTHREADMAPPING_H
+#define AZUKIHEART_REQUESTTHREADMAPPING_H
 
 #include <libKitsunemimiCommon/common_items/data_items.h>
 #include <libKitsunemimiCommon/logger.h>
 
-Kitsunemimi::DataMap* requestThreadMapping(const std::string &token,
-                                           Kitsunemimi::ErrorContainer &error);
+bool requestThreadMapping(Kitsunemimi::DataMap* completeMap,
+                          const std::string &token,
+                          Kitsunemimi::ErrorContainer &error);
 
-#endif // REQUESTTHREADMAPPING_H
+#endif // AZUKIHEART_REQUESTTHREADMAPPING_H

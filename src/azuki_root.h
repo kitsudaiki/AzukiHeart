@@ -20,8 +20,8 @@
  *      limitations under the License.
  */
 
-#ifndef AZUKIROOT_H
-#define AZUKIROOT_H
+#ifndef AZUKIHEART_AZUKIROOT_H
+#define AZUKIHEART_AZUKIROOT_H
 
 #include <string>
 
@@ -40,4 +40,4 @@ private:
     ThreadBinder* m_threadBinder = nullptr;
 };
 
-#endif // AZUKIROOT_H
+#endif // AZUKIHEART_AZUKIROOT_H

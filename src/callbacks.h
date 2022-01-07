@@ -20,8 +20,8 @@
  *      limitations under the License.
  */
 
-#ifndef CALLBACKS_H
-#define CALLBACKS_H
+#ifndef AZUKIHEART_CALLBACKS_H
+#define AZUKIHEART_CALLBACKS_H
 
 #include <libKitsunemimiSakuraNetwork/session.h>
 
@@ -34,4 +34,4 @@ void streamDataCallback(void*,
 }
 
 
-#endif // CALLBACKS_H
+#endif // AZUKIHEART_CALLBACKS_H

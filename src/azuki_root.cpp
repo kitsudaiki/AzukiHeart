@@ -40,11 +40,15 @@ using Kitsunemimi::Sakura::SakuraLangInterface;
 
 std::string* AzukiRoot::componentToken = nullptr;
 
+/**
+ * @brief constructor
+ */
 AzukiRoot::AzukiRoot() {}
 
 /**
- * @brief AzukiRoot::init
- * @return
+ * @brief init azuki
+ *
+ * @return true, if successful, else false
  */
 bool
 AzukiRoot::init()
@@ -52,27 +56,31 @@ AzukiRoot::init()
     initBlossoms();
 
     SupportedComponents* scomp = SupportedComponents::getInstance();
-
-    Kitsunemimi::Hanami::RequestMessage request;
-    request.id = "v1/token/internal";
-    request.httpType = Kitsunemimi::Hanami::GET_TYPE;
-    request.inputValues = "{\"service_name\":\"azuki\"}";
-    Kitsunemimi::ErrorContainer error;
-
     if(scomp->support[Kitsunemimi::Hanami::MISAKA])
     {
         HanamiMessaging* msg = HanamiMessaging::getInstance();
         Kitsunemimi::Hanami::ResponseMessage response;
 
+        // create request
+        Kitsunemimi::Hanami::RequestMessage request;
+        request.id = "v1/token/internal";
+        request.httpType = Kitsunemimi::Hanami::GET_TYPE;
+        request.inputValues = "{\"service_name\":\"azuki\"}";
+        Kitsunemimi::ErrorContainer error;
+
+        // request internal jwt-token from misaka
         if(msg->triggerSakuraFile("misaka", response, request, error) == false)
         {
             LOG_ERROR(error);
             return false;
         }
 
+        // check response
         if(response.success == false) {
             return false;
         }
+
+        // parse response
         Kitsunemimi::Json::JsonItem jsonItem;
         if(jsonItem.parse(response.responseContent, error) == false)
         {
@@ -80,6 +88,7 @@ AzukiRoot::init()
             return false;
         }
 
+        // get token from response
         componentToken = new std::string();
         *componentToken = jsonItem.getItemContent()->toMap()->getStringByKey("token");
         if(*componentToken == "") {
@@ -88,15 +97,18 @@ AzukiRoot::init()
     }
     else
     {
+        // create fake-token, in case that misaka is not available
         const std::string tokenKeyStr = "-";
         CryptoPP::SecByteBlock tokenKey((unsigned char*)tokenKeyStr.c_str(), tokenKeyStr.size());
         Kitsunemimi::Jwt::Jwt jwt(tokenKey);
 
+        // fill token with content
         Kitsunemimi::Json::JsonItem jsonItem;
         jsonItem.insert("service_name", "azuki");
         jwt.create_HS256_Token(*componentToken, jsonItem, 0);
     }
 
+    // create thread-binder
     m_threadBinder = new ThreadBinder();
     m_threadBinder->startThread();
 

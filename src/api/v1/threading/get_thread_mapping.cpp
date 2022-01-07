@@ -40,11 +40,18 @@ GetThreadMapping::GetThreadMapping()
     : Kitsunemimi::Sakura::Blossom("Get Mapping of the all threads of all components "
                                    "to its bound cpu-core")
 {
+    //----------------------------------------------------------------------------------------------
+    // output
+    //----------------------------------------------------------------------------------------------
+
     registerOutputField("thread_map",
                         SAKURA_MAP_TYPE,
                         "Map with all thread-names and its core-id as json-string.");
-}
 
+    //----------------------------------------------------------------------------------------------
+    //
+    //----------------------------------------------------------------------------------------------
+}
 
 /**
  * @brief runTask
@@ -56,8 +63,9 @@ GetThreadMapping::runTask(BlossomLeaf &blossomLeaf,
                           Kitsunemimi::ErrorContainer &error)
 {
     const std::string token = context.getStringByKey("token");
-    Kitsunemimi::DataMap* completeMap = requestThreadMapping(token, error);
-    if(completeMap == nullptr)
+
+    Kitsunemimi::DataMap* completeMap = new Kitsunemimi::DataMap();
+    if(requestThreadMapping(completeMap, token, error) == false)
     {
         status.statusCode = Kitsunemimi::Hanami::INTERNAL_SERVER_ERROR_RTYPE;
         return false;

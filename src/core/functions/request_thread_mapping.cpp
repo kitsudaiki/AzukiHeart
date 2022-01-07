@@ -36,9 +36,14 @@ using Kitsunemimi::Hanami::SupportedComponents;
 using Kitsunemimi::Sakura::SakuraLangInterface;
 
 /**
- * @brief handleResponse
- * @param completeDocumentation
- * @param response
+ * @brief request thread-mapping of another component
+ *
+ * @param completeMap pointer for the result to attach the thread-mapping of the requested component
+ * @param component name of the component of which the thread-mapping should be requested
+ * @param request request for getting the thread-mapping of the remote-component
+ * @param error reference for error-output
+ *
+ * @return true, if successful, else false
  */
 bool
 requestComponent(Kitsunemimi::DataMap* completeMap,
@@ -46,36 +51,41 @@ requestComponent(Kitsunemimi::DataMap* completeMap,
                  const Kitsunemimi::Hanami::RequestMessage &request,
                  Kitsunemimi::ErrorContainer &error)
 {
+    // make request
     Kitsunemimi::Hanami::HanamiMessaging* msg = Kitsunemimi::Hanami::HanamiMessaging::getInstance();
     Kitsunemimi::Hanami::ResponseMessage response;
-
     if(msg->triggerSakuraFile(component, response, request, error) == false) {
         return false;
     }
 
+    // check request-result
     if(response.success == false) {
         return false;
     }
 
+    // parse response
     Kitsunemimi::Json::JsonItem jsonItem;
     if(jsonItem.parse(response.responseContent, error) == false) {
         return false;
     }
 
+    // check if response has valid content
     if(jsonItem.get("thread_map").getItemContent()->isMap() == false) {
         return false;
     }
 
+    // add part to the complete map
     completeMap->insert(component, jsonItem.get("thread_map").getItemContent()->copy()->toMap());
 
     return true;
 }
 
 /**
- * @brief makeInternalRequest
- * @param completeDocumentation
- * @param error
- * @return
+ * @brief request the thread-mapping of azuki itself
+ *
+ * @param completeMap pointer for the result to attach the thread-mapping of azuki
+ *
+ * @return always true
  */
 bool
 makeInternalRequest(Kitsunemimi::DataMap* completeMap,
@@ -107,61 +117,67 @@ makeInternalRequest(Kitsunemimi::DataMap* completeMap,
 }
 
 /**
- * @brief requestThreadMapping
- * @param token
- * @return
+ * @brief get thread-mapping of all components
+ *
+ * @param completeMap map with mapping of all threads of all components
+ * @param token token for the access to the other components
+ * @param error reference for error-output
+ *
+ * @return true, if successful, else false
  */
-Kitsunemimi::DataMap*
-requestThreadMapping(const std::string &token,
+bool
+requestThreadMapping(Kitsunemimi::DataMap* completeMap,
+                     const std::string &token,
                      Kitsunemimi::ErrorContainer &error)
 {
+    // create request
     Kitsunemimi::Hanami::RequestMessage request;
     request.id = "get_thread_mapping";
     request.httpType = Kitsunemimi::Hanami::GET_TYPE;
     request.inputValues = "{ \"token\" : \"" + token + "\"}";
 
-    Kitsunemimi::DataMap* completeMap = new Kitsunemimi::DataMap();
     SupportedComponents* scomp = SupportedComponents::getInstance();
 
     //----------------------------------------------------------------------------------------------
+    // request from azuki itself
     if(makeInternalRequest(completeMap, error) == false) {
-        return completeMap;
+        return false;
     }
     //----------------------------------------------------------------------------------------------
     if(scomp->support[Kitsunemimi::Hanami::KYOUKO]
             && requestComponent(completeMap, "kyouko", request, error) == false)
     {
-        return completeMap;
+        return false;
     }
     //----------------------------------------------------------------------------------------------
     if(scomp->support[Kitsunemimi::Hanami::MISAKA]
             && requestComponent(completeMap, "misaka", request, error) == false)
     {
-        return completeMap;
+        return false;
     }
     //----------------------------------------------------------------------------------------------
     if(scomp->support[Kitsunemimi::Hanami::SAGIRI]
             && requestComponent(completeMap, "sagiri", request, error) == false)
     {
-        return completeMap;
+        return false;
     }
     //----------------------------------------------------------------------------------------------
     if(scomp->support[Kitsunemimi::Hanami::NAGATO]
             && requestComponent(completeMap, "nagato", request, error) == false)
     {
-        return completeMap;
+        return false;
     }
     //----------------------------------------------------------------------------------------------
     if(scomp->support[Kitsunemimi::Hanami::IZUNA]
             && requestComponent(completeMap, "izuna", request, error) == false)
     {
-        return completeMap;
+        return false;
     }
     //----------------------------------------------------------------------------------------------
     if(requestComponent(completeMap, "torii", request, error) == false) {
-        return completeMap;
+        return false;
     }
     //----------------------------------------------------------------------------------------------
 
-    return completeMap;
+    return true;
 }

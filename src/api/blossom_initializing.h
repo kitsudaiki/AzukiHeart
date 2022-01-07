@@ -20,8 +20,8 @@
  *      limitations under the License.
  */
 
-#ifndef BLOSSOM_INITIALIZING_H
-#define BLOSSOM_INITIALIZING_H
+#ifndef AZUKIHEART_BLOSSOM_INITIALIZING_H
+#define AZUKIHEART_BLOSSOM_INITIALIZING_H
 
 #include <libKitsunemimiSakuraLang/sakura_lang_interface.h>
 #include <libKitsunemimiCommon/logger.h>
@@ -54,4 +54,4 @@ initBlossoms()
                                   "get_mapping"));
 }
 
-#endif // BLOSSOM_INITIALIZING_H
+#endif // AZUKIHEART_BLOSSOM_INITIALIZING_H

@@ -20,8 +20,8 @@
  *      limitations under the License.
  */
 
-#ifndef GETTHREADMAPPING_H
-#define GETTHREADMAPPING_H
+#ifndef AZUKIHEART_GETTHREADMAPPING_H
+#define AZUKIHEART_GETTHREADMAPPING_H
 
 #include <libKitsunemimiSakuraLang/blossom.h>
 
@@ -38,4 +38,4 @@ protected:
                  Kitsunemimi::ErrorContainer &error);
 };
 
-#endif // GETTHREADMAPPING_H
+#endif // AZUKIHEART_GETTHREADMAPPING_H

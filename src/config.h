@@ -20,8 +20,8 @@
  *      limitations under the License.
  */
 
-#ifndef CONFIG_H
-#define CONFIG_H
+#ifndef AZUKIHEART_CONFIG_H
+#define AZUKIHEART_CONFIG_H
 
 #include <libKitsunemimiConfig/config_handler.h>
 #include <libKitsunemimiHanamiCommon/config.h>
@@ -36,4 +36,4 @@ registerConfigs(Kitsunemimi::ErrorContainer &error)
     Kitsunemimi::Hanami::registerBasicConfigs(error);
 }
 
-#endif // CONFIG_H
+#endif // AZUKIHEART_CONFIG_H
