@@ -1,2 +1,7 @@
 # Changelog
 
+## [0.1.0] - 2022-01-09
+
+### Added
+- request thread-mapping of all components
+- update thread-binding for all components over networt

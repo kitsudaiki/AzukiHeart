@@ -1,7 +1,7 @@
 QT -= qt core gui
 
 TARGET = AzukiHeart
-CONFIG += console c++14
+CONFIG += console c++17
 CONFIG -= app_bundle
 
 
