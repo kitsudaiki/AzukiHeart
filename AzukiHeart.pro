@@ -5,10 +5,35 @@ CONFIG += console c++14
 CONFIG -= app_bundle
 
 
-LIBS += -L../libKitsunemimiSakuraMessaging/src -lKitsunemimiSakuraMessaging
-LIBS += -L../libKitsunemimiSakuraMessaging/src/debug -lKitsunemimiSakuraMessaging
-LIBS += -L../libKitsunemimiSakuraMessaging/src/release -lKitsunemimiSakuraMessaging
-INCLUDEPATH += ../libKitsunemimiSakuraMessaging/include
+LIBS += -L../libKitsunemimiHanamiPredefinitions/src -lKitsunemimiHanamiPredefinitions
+LIBS += -L../libKitsunemimiHanamiPredefinitions/src/debug -lKitsunemimiHanamiPredefinitions
+LIBS += -L../libKitsunemimiHanamiPredefinitions/src/release -lKitsunemimiHanamiPredefinitions
+INCLUDEPATH += ../libKitsunemimiHanamiPredefinitions/include
+
+LIBS += -L../libKitsunemimiHanamiMessaging/src -lKitsunemimiHanamiMessaging
+LIBS += -L../libKitsunemimiHanamiMessaging/src/debug -lKitsunemimiHanamiMessaging
+LIBS += -L../libKitsunemimiHanamiMessaging/src/release -lKitsunemimiHanamiMessaging
+INCLUDEPATH += ../libKitsunemimiHanamiMessaging/include
+
+LIBS += -L../libKitsunemimiHanamiEndpoints/src -lKitsunemimiHanamiEndpoints
+LIBS += -L../libKitsunemimiHanamiEndpoints/src/debug -lKitsunemimiHanamiEndpoints
+LIBS += -L../libKitsunemimiHanamiEndpoints/src/release -lKitsunemimiHanamiEndpoints
+INCLUDEPATH += ../libKitsunemimiHanamiEndpoints/include
+
+LIBS += -L../libKitsunemimiHanamiCommon/src -lKitsunemimiHanamiCommon
+LIBS += -L../libKitsunemimiHanamiCommon/src/debug -lKitsunemimiHanamiCommon
+LIBS += -L../libKitsunemimiHanamiCommon/src/release -lKitsunemimiHanamiCommon
+INCLUDEPATH += ../libKitsunemimiHanamiCommon/include
+
+LIBS += -L../libKitsunemimiSakuraDatabase/src -lKitsunemimiSakuraDatabase
+LIBS += -L../libKitsunemimiSakuraDatabase/src/debug -lKitsunemimiSakuraDatabase
+LIBS += -L../libKitsunemimiSakuraDatabase/src/release -lKitsunemimiSakuraDatabase
+INCLUDEPATH += ../libKitsunemimiSakuraDatabase/include
+
+LIBS += -L../libKitsunemimiSakuraHardware/src -lKitsunemimiSakuraHardware
+LIBS += -L../libKitsunemimiSakuraHardware/src/debug -lKitsunemimiSakuraHardware
+LIBS += -L../libKitsunemimiSakuraHardware/src/release -lKitsunemimiSakuraHardware
+INCLUDEPATH += ../libKitsunemimiSakuraHardware/include
 
 LIBS += -L../libKitsunemimiSakuraLang/src -lKitsunemimiSakuraLang
 LIBS += -L../libKitsunemimiSakuraLang/src/debug -lKitsunemimiSakuraLang
@@ -30,6 +55,11 @@ LIBS += -L../libKitsunemimiSakuraNetwork/src/debug -lKitsunemimiSakuraNetwork
 LIBS += -L../libKitsunemimiSakuraNetwork/src/release -lKitsunemimiSakuraNetwork
 INCLUDEPATH += ../libKitsunemimiSakuraNetwork/include
 
+LIBS += -L../libKitsunemimiSqlite/src -lKitsunemimiSqlite
+LIBS += -L../libKitsunemimiSqlite/src/debug -lKitsunemimiSqlite
+LIBS += -L../libKitsunemimiSqlite/src/release -lKitsunemimiSqlite
+INCLUDEPATH += ../libKitsunemimiSqlite/include
+
 LIBS += -L../libKitsunemimiCommon/src -lKitsunemimiCommon
 LIBS += -L../libKitsunemimiCommon/src/debug -lKitsunemimiCommon
 LIBS += -L../libKitsunemimiCommon/src/release -lKitsunemimiCommon
@@ -39,11 +69,6 @@ LIBS += -L../libKitsunemimiNetwork/src -lKitsunemimiNetwork
 LIBS += -L../libKitsunemimiNetwork/src/debug -lKitsunemimiNetwork
 LIBS += -L../libKitsunemimiNetwork/src/release -lKitsunemimiNetwork
 INCLUDEPATH += ../libKitsunemimiNetwork/include
-
-LIBS += -L../libKitsunemimiPersistence/src -lKitsunemimiPersistence
-LIBS += -L../libKitsunemimiPersistence/src/debug -lKitsunemimiPersistence
-LIBS += -L../libKitsunemimiPersistence/src/release -lKitsunemimiPersistence
-INCLUDEPATH += ../libKitsunemimiPersistence/include
 
 LIBS += -L../libKitsunemimiJinja2/src -lKitsunemimiJinja2
 LIBS += -L../libKitsunemimiJinja2/src/debug -lKitsunemimiJinja2
@@ -60,9 +85,40 @@ LIBS += -L../libKitsunemimiIni/src/debug -lKitsunemimiIni
 LIBS += -L../libKitsunemimiIni/src/release -lKitsunemimiIni
 INCLUDEPATH += ../libKitsunemimiIni/include
 
-LIBS += -lpthread -lboost_filesystem -lboost_system -lcrypto -lssl
+LIBS += -L../libKitsunemimiJwt/src -lKitsunemimiJwt
+LIBS += -L../libKitsunemimiJwt/src/debug -lKitsunemimiJwt
+LIBS += -L../libKitsunemimiJwti/src/release -lKitsunemimiJwt
+INCLUDEPATH += ../libKitsunemimiJwt/include
+
+LIBS += -L../libKitsunemimiCrypto/src -lKitsunemimiCrypto
+LIBS += -L../libKitsunemimiCrypto/src/debug -lKitsunemimiCrypto
+LIBS += -L../libKitsunemimiCrypto/src/release -lKitsunemimiCrypto
+INCLUDEPATH += ../libKitsunemimiCrypto/include
+
+LIBS += -L../libKitsunemimiCpu/src -lKitsunemimiCpu
+LIBS += -L../libKitsunemimiCpu/src/debug -lKitsunemimiCpu
+LIBS += -L../libKitsunemimiCpu/src/release -lKitsunemimiCpu
+INCLUDEPATH += ../libKitsunemimiCpu/include
+
+LIBS += -lcryptopp -lssl -lsqlite3 -luuid -lcrypto
 
 INCLUDEPATH += $$PWD \
                src
 
-SOURCES += src/main.cpp
+SOURCES += src/main.cpp \
+    src/api/v1/system_info/get_system_info.cpp \
+    src/api/v1/threading/get_thread_mapping.cpp \
+    src/azuki_root.cpp \
+    src/core/functions/request_thread_mapping.cpp \
+    src/core/thread_binder.cpp
+
+HEADERS += \
+    src/api/blossom_initializing.h \
+    src/api/v1/system_info/get_system_info.h \
+    src/api/v1/threading/get_thread_mapping.h \
+    src/args.h \
+    src/azuki_root.h \
+    src/callbacks.h \
+    src/config.h \
+    src/core/functions/request_thread_mapping.h \
+    src/core/thread_binder.h

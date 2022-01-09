@@ -1,5 +1,5 @@
 /**
- * @file        config.h
+ * @file        callbacks.h
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,20 +20,18 @@
  *      limitations under the License.
  */
 
-#ifndef AZUKIHEART_CONFIG_H
-#define AZUKIHEART_CONFIG_H
+#ifndef AZUKIHEART_CALLBACKS_H
+#define AZUKIHEART_CALLBACKS_H
 
-#include <libKitsunemimiConfig/config_handler.h>
-#include <libKitsunemimiHanamiCommon/config.h>
-#include <libKitsunemimiCommon/logger.h>
+#include <libKitsunemimiSakuraNetwork/session.h>
 
-/**
- * @brief register configs
- */
-void
-registerConfigs(Kitsunemimi::ErrorContainer &error)
+void streamDataCallback(void*,
+                        Kitsunemimi::Sakura::Session*,
+                        const void*,
+                        const uint64_t)
 {
-    Kitsunemimi::Hanami::registerBasicConfigs(error);
+
 }
 
-#endif // AZUKIHEART_CONFIG_H
+
+#endif // AZUKIHEART_CALLBACKS_H

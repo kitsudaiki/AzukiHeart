@@ -1,5 +1,5 @@
 /**
- * @file        config.h
+ * @file        create_token.h
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,20 +20,23 @@
  *      limitations under the License.
  */
 
-#ifndef AZUKIHEART_CONFIG_H
-#define AZUKIHEART_CONFIG_H
+#ifndef AZUKIHEART_GETSYSTEMINFO_H
+#define AZUKIHEART_GETSYSTEMINFO_H
 
-#include <libKitsunemimiConfig/config_handler.h>
-#include <libKitsunemimiHanamiCommon/config.h>
-#include <libKitsunemimiCommon/logger.h>
+#include <libKitsunemimiSakuraLang/blossom.h>
 
-/**
- * @brief register configs
- */
-void
-registerConfigs(Kitsunemimi::ErrorContainer &error)
+class GetSystemInfo
+        : public Kitsunemimi::Sakura::Blossom
 {
-    Kitsunemimi::Hanami::registerBasicConfigs(error);
-}
+public:
+    GetSystemInfo();
 
-#endif // AZUKIHEART_CONFIG_H
+protected:
+    bool runTask(Kitsunemimi::Sakura::BlossomLeaf &blossomLeaf,
+                 const Kitsunemimi::DataMap &,
+                 Kitsunemimi::Sakura::BlossomStatus &status,
+                 Kitsunemimi::ErrorContainer &error);
+};
+
+
+#endif // AZUKIHEART_GETSYSTEMINFO_H

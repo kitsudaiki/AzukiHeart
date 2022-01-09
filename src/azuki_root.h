@@ -1,5 +1,5 @@
 /**
- * @file        config.h
+ * @file        misaka_root.h
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,20 +20,24 @@
  *      limitations under the License.
  */
 
-#ifndef AZUKIHEART_CONFIG_H
-#define AZUKIHEART_CONFIG_H
+#ifndef AZUKIHEART_AZUKIROOT_H
+#define AZUKIHEART_AZUKIROOT_H
 
-#include <libKitsunemimiConfig/config_handler.h>
-#include <libKitsunemimiHanamiCommon/config.h>
-#include <libKitsunemimiCommon/logger.h>
+#include <string>
 
-/**
- * @brief register configs
- */
-void
-registerConfigs(Kitsunemimi::ErrorContainer &error)
+class ThreadBinder;
+
+class AzukiRoot
 {
-    Kitsunemimi::Hanami::registerBasicConfigs(error);
-}
+public:
+    AzukiRoot();
 
-#endif // AZUKIHEART_CONFIG_H
+    bool init();
+
+    static std::string* componentToken;
+
+private:
+    ThreadBinder* m_threadBinder = nullptr;
+};
+
+#endif // AZUKIHEART_AZUKIROOT_H

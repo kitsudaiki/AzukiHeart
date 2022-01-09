@@ -1,5 +1,5 @@
 /**
- * @file        config.h
+ * @file        thread_binder.h
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,20 +20,32 @@
  *      limitations under the License.
  */
 
-#ifndef AZUKIHEART_CONFIG_H
-#define AZUKIHEART_CONFIG_H
+#ifndef AZUKIHEART_THREADBINDER_H
+#define AZUKIHEART_THREADBINDER_H
 
-#include <libKitsunemimiConfig/config_handler.h>
-#include <libKitsunemimiHanamiCommon/config.h>
-#include <libKitsunemimiCommon/logger.h>
+#include <libKitsunemimiCommon/threading/thread.h>
 
-/**
- * @brief register configs
- */
-void
-registerConfigs(Kitsunemimi::ErrorContainer &error)
-{
-    Kitsunemimi::Hanami::registerBasicConfigs(error);
+namespace Kitsunemimi {
+namespace Hanami {
+struct RequestMessage;
+}
 }
 
-#endif // AZUKIHEART_CONFIG_H
+class ThreadBinder
+        : public Kitsunemimi::Thread
+{
+public:
+    ThreadBinder();
+
+protected:
+    void run();
+
+private:
+    bool changeInternalCoreIds(const std::vector<std::string> &threadNames, const long coreId);
+    void changeRemoteCoreIds(const std::string &component,
+                             Kitsunemimi::Hanami::RequestMessage &request,
+                             const std::vector<std::string> &threadNames,
+                             const long coreId);
+};
+
+#endif // AZUKIHEART_THREADBINDER_H
