@@ -1,5 +1,5 @@
 /**
- * @file        config.h
+ * @file        request_thread_mapping.h
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,20 +20,14 @@
  *      limitations under the License.
  */
 
-#ifndef AZUKIHEART_CONFIG_H
-#define AZUKIHEART_CONFIG_H
+#ifndef AZUKIHEART_REQUESTTHREADMAPPING_H
+#define AZUKIHEART_REQUESTTHREADMAPPING_H
 
-#include <libKitsunemimiConfig/config_handler.h>
-#include <libKitsunemimiHanamiCommon/config.h>
+#include <libKitsunemimiCommon/common_items/data_items.h>
 #include <libKitsunemimiCommon/logger.h>
 
-/**
- * @brief register configs
- */
-void
-registerConfigs(Kitsunemimi::ErrorContainer &error)
-{
-    Kitsunemimi::Hanami::registerBasicConfigs(error);
-}
+bool requestThreadMapping(Kitsunemimi::DataMap* completeMap,
+                          const std::string &token,
+                          Kitsunemimi::ErrorContainer &error);
 
-#endif // AZUKIHEART_CONFIG_H
+#endif // AZUKIHEART_REQUESTTHREADMAPPING_H
