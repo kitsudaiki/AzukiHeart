@@ -24,7 +24,6 @@ name | repository | version | task
 ssl library | libssl-dev | 1.1.x | encryption for tls connections
 crpyto++ | libcrypto++-dev | >= 5.6 | provides encryption-functions like AES
 uuid | uuid-dev | >= 2.34 | generate uuid's
-sqlite3 library | libsqlite3-dev | >= 3.0 | handling of sqlite databases
 
 #### Required kitsunemimi libraries
 
@@ -40,10 +39,8 @@ libKitsunemimiConfig | v0.4.0 |  https://github.com/kitsudaiki/libKitsunemimiCon
 libKitsunemimiCrypto | v0.2.0 |  -
 libKitsunemimiJwt | v0.4.1 |  -
 libKitsunemimiCpu | v0.2.0 |  -
-libKitsunemimiCrypto | v0.3.0 |  -
 libKitsunemimiSakuraNetwork | v0.8.2 |  https://github.com/kitsudaiki/libKitsunemimiSakuraNetwork.git
 libKitsunemimiSakuraLang | v0.12.0 |  https://github.com/kitsudaiki/libKitsunemimiSakuraLang.git
-libKitsunemimiSakuraDatabase | v0.4.0 |  -
 libKitsunemimiSakuraHardware | v0.1.0 |  -
 libKitsunemimiHanamiCommon | v0.1.0 |  -
 libKitsunemimiHanamiEndpoints | v0.1.0 |  -
