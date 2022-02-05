@@ -24,11 +24,19 @@
 #define AZUKIHEART_CALLBACKS_H
 
 #include <libKitsunemimiSakuraNetwork/session.h>
+#include <libKitsunemimiJson/json_item.h>
 
 void streamDataCallback(void*,
                         Kitsunemimi::Sakura::Session*,
                         const void*,
                         const uint64_t)
+{
+
+}
+
+void genericCallback(Kitsunemimi::Sakura::Session*,
+                     const Kitsunemimi::Json::JsonItem&,
+                     const uint64_t)
 {
 
 }
