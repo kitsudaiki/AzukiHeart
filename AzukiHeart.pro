@@ -1,14 +1,18 @@
 QT -= qt core gui
 
 TARGET = AzukiHeart
-CONFIG += console c++17
-CONFIG -= app_bundle
+CONFIG += console
+CONFIG += c++17
 
+LIBS += -L../libAzukiHeart/src -lAzukiHeart
+LIBS += -L../libAzukiHeart/src/debug -lAzukiHeart
+LIBS += -L../libAzukiHeart/src/release -lAzukiHeart
+INCLUDEPATH += ../libAzukiHeart/include
 
-LIBS += -L../libKitsunemimiHanamiPredefinitions/src -lKitsunemimiHanamiPredefinitions
-LIBS += -L../libKitsunemimiHanamiPredefinitions/src/debug -lKitsunemimiHanamiPredefinitions
-LIBS += -L../libKitsunemimiHanamiPredefinitions/src/release -lKitsunemimiHanamiPredefinitions
-INCLUDEPATH += ../libKitsunemimiHanamiPredefinitions/include
+LIBS += -L../libMisakaGuard/src -lMisakaGuard
+LIBS += -L../libMisakaGuard/src/debug -lMisakaGuard
+LIBS += -L../libMisakaGuard/src/release -lMisakaGuard
+INCLUDEPATH += ../libMisakaGuard/include
 
 LIBS += -L../libKitsunemimiHanamiMessaging/src -lKitsunemimiHanamiMessaging
 LIBS += -L../libKitsunemimiHanamiMessaging/src/debug -lKitsunemimiHanamiMessaging
