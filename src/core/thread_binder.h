@@ -24,6 +24,7 @@
 #define AZUKIHEART_THREADBINDER_H
 
 #include <libKitsunemimiCommon/threading/thread.h>
+#include <libKitsunemimiCommon/logger.h>
 
 namespace Kitsunemimi {
 namespace Hanami {

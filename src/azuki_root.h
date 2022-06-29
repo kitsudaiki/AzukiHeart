@@ -25,6 +25,8 @@
 
 #include <string>
 
+#include <libKitsunemimiCommon/logger.h>
+
 class ThreadBinder;
 
 class AzukiRoot

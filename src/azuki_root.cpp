@@ -53,60 +53,19 @@ AzukiRoot::AzukiRoot() {}
 bool
 AzukiRoot::init()
 {
+    Kitsunemimi::ErrorContainer error;
     initBlossoms();
 
-    SupportedComponents* scomp = SupportedComponents::getInstance();
-    if(scomp->support[Kitsunemimi::Hanami::MISAKA])
+    // init internal token for access to other components
+    std::string token = "";
+    if(HanamiMessaging::getInstance()->getInternalToken(token, "azuki", error) == false)
     {
-        HanamiMessaging* msg = HanamiMessaging::getInstance();
-        Kitsunemimi::Hanami::ResponseMessage response;
-
-        // create request
-        Kitsunemimi::Hanami::RequestMessage request;
-        request.id = "v1/token/internal";
-        request.httpType = Kitsunemimi::Hanami::GET_TYPE;
-        request.inputValues = "{\"service_name\":\"azuki\"}";
-        Kitsunemimi::ErrorContainer error;
-
-        // request internal jwt-token from misaka
-        if(msg->triggerSakuraFile("misaka", response, request, error) == false)
-        {
-            LOG_ERROR(error);
-            return false;
-        }
-
-        // check response
-        if(response.success == false) {
-            return false;
-        }
-
-        // parse response
-        Kitsunemimi::Json::JsonItem jsonItem;
-        if(jsonItem.parse(response.responseContent, error) == false)
-        {
-            LOG_ERROR(error);
-            return false;
-        }
-
-        // get token from response
-        componentToken = new std::string();
-        *componentToken = jsonItem.getItemContent()->toMap()->getStringByKey("token");
-        if(*componentToken == "") {
-            return false;
-        }
+        error.addMeesage("Failed to get internal token");
+        LOG_ERROR(error);
+        return 1;
     }
-    else
-    {
-        // create fake-token, in case that misaka is not available
-        const std::string tokenKeyStr = "-";
-        CryptoPP::SecByteBlock tokenKey((unsigned char*)tokenKeyStr.c_str(), tokenKeyStr.size());
-        Kitsunemimi::Jwt::Jwt jwt(tokenKey);
-
-        // fill token with content
-        Kitsunemimi::Json::JsonItem jsonItem;
-        jsonItem.insert("service_name", "azuki");
-        jwt.create_HS256_Token(*componentToken, jsonItem, 0);
-    }
+    AzukiRoot::componentToken = new std::string();
+    *AzukiRoot::componentToken = token;
 
     // create thread-binder
     m_threadBinder = new ThreadBinder();

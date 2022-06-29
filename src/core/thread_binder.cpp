@@ -26,11 +26,15 @@
 
 #include <libKitsunemimiHanamiCommon/enums.h>
 #include <libKitsunemimiHanamiMessaging/hanami_messaging.h>
+#include <libKitsunemimiHanamiMessaging/hanami_messaging_client.h>
 
 #include <libKitsunemimiJwt/jwt.h>
 #include <libKitsunemimiJson/json_item.h>
 #include <libKitsunemimiCommon/threading/thread.h>
 #include <libKitsunemimiCommon/threading/thread_handler.h>
+
+using Kitsunemimi::Hanami::HanamiMessagingClient;
+using Kitsunemimi::Hanami::HanamiMessaging;
 
 ThreadBinder::ThreadBinder()
     : Kitsunemimi::Thread("Azuki_ThreadBinder")
@@ -78,8 +82,6 @@ ThreadBinder::changeRemoteCoreIds(const std::string &component,
                                   const std::vector<std::string> &threadNames,
                                   const long coreId)
 {
-    Kitsunemimi::Hanami::HanamiMessaging* msg = Kitsunemimi::Hanami::HanamiMessaging::getInstance();
-
     for(const std::string &name : threadNames)
     {
         Kitsunemimi::ErrorContainer error;
@@ -90,8 +92,18 @@ ThreadBinder::changeRemoteCoreIds(const std::string &component,
                               ", \"core_id\":"       + std::to_string(coreId)     + ""
                               ", \"thread_name\":\"" + name                       + "\"}";
 
+        // get internal client for interaction with sagiri
+        HanamiMessagingClient* client = HanamiMessaging::getInstance()->getOutgoingClient(component);
+        if(client == nullptr)
+        {
+            error.addMeesage("Failed to get client to '" + component + "'");
+            error.addSolution("Check if '" + component + "' is correctly configured");
+            return;
+        }
+
         // trigger remote-action for thread-binding
-        if(msg->triggerSakuraFile(component, response, request, error) == false) {
+        if(client->triggerSakuraFile(response, request, error) == false)
+        {
             LOG_ERROR(error);
         }
 

@@ -26,12 +26,15 @@
 #include <libKitsunemimiHanamiCommon/uuid.h>
 #include <libKitsunemimiHanamiCommon/component_support.h>
 #include <libKitsunemimiHanamiMessaging/hanami_messaging.h>
+#include <libKitsunemimiHanamiMessaging/hanami_messaging_client.h>
 
 #include <libKitsunemimiCommon/threading/thread.h>
 #include <libKitsunemimiCommon/threading/thread_handler.h>
 #include <libKitsunemimiJson/json_item.h>
 
 using namespace Kitsunemimi::Sakura;
+using Kitsunemimi::Hanami::HanamiMessagingClient;
+using Kitsunemimi::Hanami::HanamiMessaging;
 using Kitsunemimi::Hanami::SupportedComponents;
 using Kitsunemimi::Sakura::SakuraLangInterface;
 
@@ -51,10 +54,17 @@ requestComponent(Kitsunemimi::DataMap* completeMap,
                  const Kitsunemimi::Hanami::RequestMessage &request,
                  Kitsunemimi::ErrorContainer &error)
 {
-    // make request
-    Kitsunemimi::Hanami::HanamiMessaging* msg = Kitsunemimi::Hanami::HanamiMessaging::getInstance();
+    // get internal client for interaction with sagiri
+    HanamiMessagingClient* client = HanamiMessaging::getInstance()->getOutgoingClient(component);
+    if(client == nullptr)
+    {
+        error.addMeesage("Failed to get client to '" + component + "'");
+        error.addSolution("Check if '" + component + "' is correctly configured");
+        return false;
+    }
+
     Kitsunemimi::Hanami::ResponseMessage response;
-    if(msg->triggerSakuraFile(component, response, request, error) == false) {
+    if(client->triggerSakuraFile(response, request, error) == false) {
         return false;
     }
 
