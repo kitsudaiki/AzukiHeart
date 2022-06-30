@@ -33,12 +33,16 @@
 #include <libKitsunemimiHanamiCommon/component_support.h>
 #include <libKitsunemimiHanamiMessaging/hanami_messaging.h>
 
+#include <libKitsunemimiSakuraHardware/host.h>
+
 using namespace Kitsunemimi::Sakura;
 using Kitsunemimi::Hanami::SupportedComponents;
 using Kitsunemimi::Hanami::HanamiMessaging;
 using Kitsunemimi::Sakura::SakuraLangInterface;
 
 std::string* AzukiRoot::componentToken = nullptr;
+ThreadBinder* AzukiRoot::threadBinder = nullptr;
+Kitsunemimi::Sakura::Host* AzukiRoot::host = nullptr;
 
 /**
  * @brief constructor
@@ -67,9 +71,18 @@ AzukiRoot::init()
     AzukiRoot::componentToken = new std::string();
     *AzukiRoot::componentToken = token;
 
+    // init overview of all resources of the host
+    AzukiRoot::host = new Kitsunemimi::Sakura::Host();
+    if(AzukiRoot::host->initHost(error) == false)
+    {
+        error.addMeesage("Failed read resource-information of the local host");
+        LOG_ERROR(error);
+        return 1;
+    }
+
     // create thread-binder
-    m_threadBinder = new ThreadBinder();
-    m_threadBinder->startThread();
+    AzukiRoot::threadBinder = new ThreadBinder();
+    AzukiRoot::threadBinder->startThread();
 
     return true;
 }

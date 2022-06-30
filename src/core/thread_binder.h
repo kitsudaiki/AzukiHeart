@@ -23,8 +23,11 @@
 #ifndef AZUKIHEART_THREADBINDER_H
 #define AZUKIHEART_THREADBINDER_H
 
+#include <mutex>
+
 #include <libKitsunemimiCommon/threading/thread.h>
 #include <libKitsunemimiCommon/logger.h>
+#include <libKitsunemimiCommon/common_items/data_items.h>
 
 namespace Kitsunemimi {
 namespace Hanami {
@@ -38,15 +41,37 @@ class ThreadBinder
 public:
     ThreadBinder();
 
+    Kitsunemimi::DataMap* getMapping();
+
 protected:
     void run();
 
 private:
-    bool changeInternalCoreIds(const std::vector<std::string> &threadNames, const long coreId);
+    const std::string convertCoreIdList(const std::vector<uint64_t> coreIds);
+    bool changeInternalCoreIds(const std::vector<std::string> &threadNames,
+                               const std::vector<uint64_t> coreIds);
     void changeRemoteCoreIds(const std::string &component,
                              Kitsunemimi::Hanami::RequestMessage &request,
-                             const std::vector<std::string> &threadNames,
-                             const long coreId);
+                             const std::vector<std::string> &threadNames);
+    bool requestComponent(Kitsunemimi::DataMap *completeMap,
+                          const std::string &component,
+                          const Kitsunemimi::Hanami::RequestMessage &request,
+                          Kitsunemimi::ErrorContainer &error);
+    bool makeInternalRequest(Kitsunemimi::DataMap *completeMap,
+                             Kitsunemimi::ErrorContainer &);
+    bool requestThreadMapping(Kitsunemimi::DataMap *completeMap,
+                              const std::string &token,
+                              Kitsunemimi::ErrorContainer &error);
+
+    bool fillCoreIds(std::vector<uint64_t> &controlCoreIds,
+                     const uint64_t physCoreId);
+    bool fillCoreIds(std::vector<uint64_t> &coreIds,
+                     std::vector<uint64_t> &processingCoreIds);
+
+    std::mutex m_mapLock;
+    Kitsunemimi::DataMap m_completeMap;
+    std::vector<uint64_t> m_controlCoreIds;
+    std::vector<uint64_t> m_processingCoreIds;
 };
 
 #endif // AZUKIHEART_THREADBINDER_H

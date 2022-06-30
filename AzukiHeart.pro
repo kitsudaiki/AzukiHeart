@@ -103,7 +103,6 @@ SOURCES += src/main.cpp \
     src/api/v1/system_info/get_system_info.cpp \
     src/api/v1/threading/get_thread_mapping.cpp \
     src/azuki_root.cpp \
-    src/core/functions/request_thread_mapping.cpp \
     src/core/thread_binder.cpp
 
 HEADERS += \
@@ -114,5 +113,4 @@ HEADERS += \
     src/azuki_root.h \
     src/callbacks.h \
     src/config.h \
-    src/core/functions/request_thread_mapping.h \
     src/core/thread_binder.h
