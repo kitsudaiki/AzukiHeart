@@ -298,18 +298,32 @@ ThreadBinder::requestThreadMapping(Kitsunemimi::DataMap* completeMap,
 }
 
 /**
- * @brief ThreadBinder::fillCoreIds
- * @param controlCoreIds
- * @param physCoreId
- * @return
+ * @brief fill lists with ids for the binding
+ *
+ * @param controlCoreIds reference to the list for all ids of control-processes
+ * @param processingCoreIds reference to the list for all ids of processing-processes
+ *
+ * @return false, if a list is empty, else true
  */
 bool
 ThreadBinder::fillCoreIds(std::vector<uint64_t> &controlCoreIds,
-                          const uint64_t physCoreId)
+                          std::vector<uint64_t> &processingCoreIds)
 {
-    CpuCore* phyCore = AzukiRoot::host->cpuPackages[0]->cpuCores[physCoreId];
+    CpuCore* phyCore = nullptr;
+
+    // control-cores
+    phyCore = AzukiRoot::host->cpuPackages[0]->cpuCores[0];
     for(CpuThread* singleThread : phyCore->cpuThreads) {
         controlCoreIds.push_back(singleThread->threadId);
+    }
+
+    // processing-cores
+    for(uint64_t i = 1; i < AzukiRoot::host->cpuPackages[0]->cpuCores.size(); i++)
+    {
+        phyCore = AzukiRoot::host->cpuPackages[0]->cpuCores[i];
+        for(CpuThread* singleThread : phyCore->cpuThreads) {
+            processingCoreIds.push_back(singleThread->threadId);
+        }
     }
 
     if(controlCoreIds.size() == 0) {
@@ -317,26 +331,8 @@ ThreadBinder::fillCoreIds(std::vector<uint64_t> &controlCoreIds,
         return false;
     }
 
-    return true;
-}
-
-/**
- * @brief ThreadBinder::fillCoreIds
- *
- * @param controlCoreIds
- * @param processingCoreIds
- *
- * @return
- */
-bool
-ThreadBinder::fillCoreIds(std::vector<uint64_t> &controlCoreIds,
-                          std::vector<uint64_t> &processingCoreIds)
-{
-    if(fillCoreIds(controlCoreIds, 0) == false) {
-        return false;
-    }
-
-    if(fillCoreIds(processingCoreIds, 1) == false) {
+    if(processingCoreIds.size() == 0) {
+        // TODO: error
         return false;
     }
 
@@ -365,28 +361,34 @@ ThreadBinder::run()
             LOG_ERROR(error);
         }
 
-        // debug-output
-        std::cout<<"#################################################################"<<std::endl;
-        std::cout<<newMapping.toString(true)<<std::endl;
-        std::cout<<"#################################################################"<<std::endl;
-
-        // create request for thread-binding
-        Kitsunemimi::Hanami::RequestMessage request;
-        request.id = "v1/bind_thread_to_core";
-        request.httpType = Kitsunemimi::Hanami::POST_TYPE;
-
-        // update thread-binding for all components
-        std::map<std::string,Kitsunemimi:: DataItem*>::const_iterator it;
-        for(it = newMapping.map.begin();
-            it != newMapping.map.end();
-            it++)
+        const std::string newMappingStr = newMapping.toString();
+        if(m_lastMapping != newMappingStr)
         {
-            const std::vector<std::string> threadNames = it->second->toMap()->getKeys();
-            if(it->first == "azuki") {
-                changeInternalCoreIds(threadNames, m_controlCoreIds);
-            } else {
-                changeRemoteCoreIds(it->first, request, threadNames);
+            // debug-output
+            //std::cout<<"#############################################################"<<std::endl;
+            //std::cout<<newMapping.toString(true)<<std::endl;
+            //std::cout<<"#############################################################"<<std::endl;
+
+            // create request for thread-binding
+            Kitsunemimi::Hanami::RequestMessage request;
+            request.id = "v1/bind_thread_to_core";
+            request.httpType = Kitsunemimi::Hanami::POST_TYPE;
+
+            // update thread-binding for all components
+            std::map<std::string,Kitsunemimi:: DataItem*>::const_iterator it;
+            for(it = newMapping.map.begin();
+                it != newMapping.map.end();
+                it++)
+            {
+                const std::vector<std::string> threadNames = it->second->toMap()->getKeys();
+                if(it->first == "azuki") {
+                    changeInternalCoreIds(threadNames, m_controlCoreIds);
+                } else {
+                    changeRemoteCoreIds(it->first, request, threadNames);
+                }
             }
+
+            m_lastMapping = newMappingStr;
         }
 
         m_mapLock.unlock();
@@ -396,9 +398,11 @@ ThreadBinder::run()
 }
 
 /**
- * @brief ThreadBinder::convertCoreIdList
- * @param coreIds
- * @return
+ * @brief convert list to a string
+ *
+ * @param coreIds list with ids
+ *
+ * @return comma-separated string with the input-values
  */
 const std::string
 ThreadBinder::convertCoreIdList(const std::vector<uint64_t> coreIds)

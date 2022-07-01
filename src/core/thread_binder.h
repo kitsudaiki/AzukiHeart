@@ -63,13 +63,12 @@ private:
                               const std::string &token,
                               Kitsunemimi::ErrorContainer &error);
 
-    bool fillCoreIds(std::vector<uint64_t> &controlCoreIds,
-                     const uint64_t physCoreId);
     bool fillCoreIds(std::vector<uint64_t> &coreIds,
                      std::vector<uint64_t> &processingCoreIds);
 
     std::mutex m_mapLock;
     Kitsunemimi::DataMap m_completeMap;
+    std::string m_lastMapping = "";
     std::vector<uint64_t> m_controlCoreIds;
     std::vector<uint64_t> m_processingCoreIds;
 };
