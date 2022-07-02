@@ -368,6 +368,7 @@ ThreadBinder::run()
             //std::cout<<"#############################################################"<<std::endl;
             //std::cout<<newMapping.toString(true)<<std::endl;
             //std::cout<<"#############################################################"<<std::endl;
+            LOG_DEBUG(newMapping.toString(true));
 
             // create request for thread-binding
             Kitsunemimi::Hanami::RequestMessage request;
