@@ -29,7 +29,7 @@ uuid | uuid-dev | >= 2.34 | generate uuid's
 
 Repository-Name | Version-Tag | Download-Path
 --- | --- | ---
-libKitsunemimiCommon | v0.25.3 |  https://github.com/kitsudaiki/libKitsunemimiCommon.git
+libKitsunemimiCommon | v0.26.1 |  https://github.com/kitsudaiki/libKitsunemimiCommon.git
 libKitsunemimiJson | v0.11.3 |  https://github.com/kitsudaiki/libKitsunemimiJson.git
 libKitsunemimiJinja2 | v0.9.1 |  https://github.com/kitsudaiki/libKitsunemimiJinja2.git
 libKitsunemimiIni | v0.5.1 |  https://github.com/kitsudaiki/libKitsunemimiIni.git
@@ -38,14 +38,14 @@ libKitsunemimiArgs | v0.4.0 |  https://github.com/kitsudaiki/libKitsunemimiArgs.
 libKitsunemimiConfig | v0.4.0 |  https://github.com/kitsudaiki/libKitsunemimiConfig.git
 libKitsunemimiCrypto | v0.2.0 |  -
 libKitsunemimiJwt | v0.4.1 |  -
-libKitsunemimiCpu | v0.2.0 |  -
+libKitsunemimiCpu | v0.3.0 |  -
 libKitsunemimiSakuraNetwork | v0.8.2 |  https://github.com/kitsudaiki/libKitsunemimiSakuraNetwork.git
 libKitsunemimiSakuraLang | v0.12.0 |  https://github.com/kitsudaiki/libKitsunemimiSakuraLang.git
-libKitsunemimiSakuraHardware | v0.1.0 |  -
-libKitsunemimiHanamiCommon | v0.1.0 |  -
+libKitsunemimiSakuraHardware | v0.1.1 |  -
+libKitsunemimiHanamiCommon | v0.2.0 |  -
 libKitsunemimiHanamiEndpoints | v0.1.0 |  -
-libKitsunemimiHanamiMessaging | v0.3.0 |  -
-libAzukiHeart | v0.1.0 | -
+libKitsunemimiHanamiMessaging | v0.4.1 |  -
+libAzukiHeart | v0.2.0 | -
 libMisakaGuard | v0.1.0 | -
 
 HINT: These Kitsunemimi-Libraries will be downloaded and build automatically with the build-script below.
