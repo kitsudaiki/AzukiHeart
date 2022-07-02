@@ -21,16 +21,14 @@
  */
 
 #include "get_thread_mapping.h"
-#include <core/functions/request_thread_mapping.h>
 
 #include <libKitsunemimiHanamiCommon/enums.h>
 #include <libKitsunemimiHanamiCommon/uuid.h>
 #include <libKitsunemimiHanamiCommon/component_support.h>
 #include <libKitsunemimiHanamiMessaging/hanami_messaging.h>
 
-#include <libKitsunemimiCommon/threading/thread.h>
-#include <libKitsunemimiCommon/threading/thread_handler.h>
-#include <libKitsunemimiJson/json_item.h>
+#include <azuki_root.h>
+#include <core/thread_binder.h>
 
 using namespace Kitsunemimi::Sakura;
 using Kitsunemimi::Hanami::SupportedComponents;
@@ -58,20 +56,11 @@ GetThreadMapping::GetThreadMapping()
  */
 bool
 GetThreadMapping::runTask(BlossomLeaf &blossomLeaf,
-                          const Kitsunemimi::DataMap &context,
-                          BlossomStatus &status,
-                          Kitsunemimi::ErrorContainer &error)
+                          const Kitsunemimi::DataMap &,
+                          BlossomStatus &,
+                          Kitsunemimi::ErrorContainer &)
 {
-    const std::string token = context.getStringByKey("token");
-
-    Kitsunemimi::DataMap* completeMap = new Kitsunemimi::DataMap();
-    if(requestThreadMapping(completeMap, token, error) == false)
-    {
-        status.statusCode = Kitsunemimi::Hanami::INTERNAL_SERVER_ERROR_RTYPE;
-        return false;
-    }
-
-    blossomLeaf.output.insert("thread_map", completeMap);
+    blossomLeaf.output.insert("thread_map", AzukiRoot::threadBinder->getMapping());
 
     return true;
 }

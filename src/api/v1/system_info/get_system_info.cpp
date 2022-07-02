@@ -21,12 +21,11 @@
  */
 
 #include "get_system_info.h"
+#include <azuki_root.h>
 
 #include <libKitsunemimiHanamiCommon/enums.h>
 
 #include <libKitsunemimiSakuraHardware/host.h>
-
-#include <libKitsunemimiJson/json_item.h>
 
 using namespace Kitsunemimi::Sakura;
 
@@ -55,29 +54,11 @@ GetSystemInfo::GetSystemInfo()
 bool
 GetSystemInfo::runTask(BlossomLeaf &blossomLeaf,
                        const Kitsunemimi::DataMap &,
-                       BlossomStatus &status,
-                       Kitsunemimi::ErrorContainer &error)
+                       BlossomStatus &,
+                       Kitsunemimi::ErrorContainer &)
 {
-    // get host-info
-    Kitsunemimi::Sakura::Host host;
-    if(host.initHost(error) == false)
-    {
-        status.statusCode = Kitsunemimi::Hanami::INTERNAL_SERVER_ERROR_RTYPE;
-        error.addMeesage("Failed to get system-information.");
-        return false;
-    }
-
-    // parse-info
-    Kitsunemimi::Json::JsonItem parsedPayload;
-    if(parsedPayload.parse(host.toJsonString(), error) == false)
-    {
-        error.addMeesage("Failed to parse json with system-information.");
-        status.statusCode = Kitsunemimi::Hanami::INTERNAL_SERVER_ERROR_RTYPE;
-        return false;
-    }
-
     // creat output
-    blossomLeaf.output.insert("info", parsedPayload.stealItemContent());
+    blossomLeaf.output.insert("info", AzukiRoot::host->toJson());
 
     return true;
 }

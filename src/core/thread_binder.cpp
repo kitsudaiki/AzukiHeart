@@ -22,19 +22,42 @@
 
 #include "thread_binder.h"
 #include <azuki_root.h>
-#include <core/functions/request_thread_mapping.h>
+
+#include <libKitsunemimiSakuraHardware/host.h>
+#include <libKitsunemimiSakuraHardware/cpu_core.h>
+#include <libKitsunemimiSakuraHardware/cpu_package.h>
+#include <libKitsunemimiSakuraHardware/cpu_thread.h>
 
 #include <libKitsunemimiHanamiCommon/enums.h>
+#include <libKitsunemimiHanamiCommon/component_support.h>
 #include <libKitsunemimiHanamiMessaging/hanami_messaging.h>
+#include <libKitsunemimiHanamiMessaging/hanami_messaging_client.h>
 
 #include <libKitsunemimiJwt/jwt.h>
 #include <libKitsunemimiJson/json_item.h>
 #include <libKitsunemimiCommon/threading/thread.h>
 #include <libKitsunemimiCommon/threading/thread_handler.h>
 
+using namespace Kitsunemimi::Sakura;
+using Kitsunemimi::Hanami::HanamiMessagingClient;
+using Kitsunemimi::Hanami::HanamiMessaging;
+using Kitsunemimi::Hanami::SupportedComponents;
+using Kitsunemimi::Sakura::SakuraLangInterface;
+
 ThreadBinder::ThreadBinder()
     : Kitsunemimi::Thread("Azuki_ThreadBinder")
 {
+}
+
+/**
+ * @brief ThreadBinder::getMappingString
+ * @return
+ */
+Kitsunemimi::DataMap*
+ThreadBinder::getMapping()
+{
+    std::lock_guard<std::mutex> guard(m_mapLock);
+    return m_completeMap.copy()->toMap();
 }
 
 /**
@@ -47,7 +70,7 @@ ThreadBinder::ThreadBinder()
  */
 bool
 ThreadBinder::changeInternalCoreIds(const std::vector<std::string> &threadNames,
-                                    const long coreId)
+                                    const std::vector<uint64_t> coreIds)
 {
     Kitsunemimi::ThreadHandler* threadHandler = Kitsunemimi::ThreadHandler::getInstance();
     for(const std::string &name : threadNames)
@@ -55,7 +78,7 @@ ThreadBinder::changeInternalCoreIds(const std::vector<std::string> &threadNames,
         const std::vector<Kitsunemimi::Thread*> threads = threadHandler->getThreads(name);
         for(Kitsunemimi::Thread* thread : threads)
         {
-            if(thread->bindThreadToCore(coreId) == false) {
+            if(thread->bindThreadToCores(coreIds) == false) {
                 return false;
             }
         }
@@ -75,23 +98,38 @@ ThreadBinder::changeInternalCoreIds(const std::vector<std::string> &threadNames,
 void
 ThreadBinder::changeRemoteCoreIds(const std::string &component,
                                   Kitsunemimi::Hanami::RequestMessage &request,
-                                  const std::vector<std::string> &threadNames,
-                                  const long coreId)
+                                  const std::vector<std::string> &threadNames)
 {
-    Kitsunemimi::Hanami::HanamiMessaging* msg = Kitsunemimi::Hanami::HanamiMessaging::getInstance();
-
     for(const std::string &name : threadNames)
     {
         Kitsunemimi::ErrorContainer error;
         Kitsunemimi::Hanami::ResponseMessage response;
 
         // set values for thread-binding
-        request.inputValues = "{ \"token\":\""       + *AzukiRoot::componentToken + "\""
-                              ", \"core_id\":"       + std::to_string(coreId)     + ""
-                              ", \"thread_name\":\"" + name                       + "\"}";
+        request.inputValues = "{ \"token\":\""
+                              + *AzukiRoot::componentToken
+                              + "\",\"core_ids\":[";
+
+        if(name == "CpuProcessingUnit") {
+            request.inputValues.append(convertCoreIdList(m_processingCoreIds));
+        } else {
+            request.inputValues.append(convertCoreIdList(m_controlCoreIds));
+        }
+
+        request.inputValues.append("],\"thread_name\":\"" + name + "\"}");
+
+        // get internal client for interaction with sagiri
+        HanamiMessagingClient* client = HanamiMessaging::getInstance()->getOutgoingClient(component);
+        if(client == nullptr)
+        {
+            error.addMeesage("Failed to get client to '" + component + "'");
+            error.addSolution("Check if '" + component + "' is correctly configured");
+            return;
+        }
 
         // trigger remote-action for thread-binding
-        if(msg->triggerSakuraFile(component, response, request, error) == false) {
+        if(client->triggerSakuraFile(response, request, error) == false)
+        {
             LOG_ERROR(error);
         }
 
@@ -104,48 +142,279 @@ ThreadBinder::changeRemoteCoreIds(const std::string &component,
     }
 }
 
+
+/**
+ * @brief request thread-mapping of another component
+ *
+ * @param completeMap pointer for the result to attach the thread-mapping of the requested component
+ * @param component name of the component of which the thread-mapping should be requested
+ * @param request request for getting the thread-mapping of the remote-component
+ * @param error reference for error-output
+ *
+ * @return true, if successful, else false
+ */
+bool
+ThreadBinder::requestComponent(Kitsunemimi::DataMap* completeMap,
+                               const std::string &component,
+                               const Kitsunemimi::Hanami::RequestMessage &request,
+                               Kitsunemimi::ErrorContainer &error)
+{
+    // get internal client for interaction with sagiri
+    HanamiMessagingClient* client = HanamiMessaging::getInstance()->getOutgoingClient(component);
+    if(client == nullptr)
+    {
+        error.addMeesage("Failed to get client to '" + component + "'");
+        error.addSolution("Check if '" + component + "' is correctly configured");
+        return false;
+    }
+
+    Kitsunemimi::Hanami::ResponseMessage response;
+    if(client->triggerSakuraFile(response, request, error) == false) {
+        return false;
+    }
+
+    // check request-result
+    if(response.success == false) {
+        return false;
+    }
+
+    // parse response
+    Kitsunemimi::Json::JsonItem jsonItem;
+    if(jsonItem.parse(response.responseContent, error) == false) {
+        return false;
+    }
+
+    // check if response has valid content
+    if(jsonItem.get("thread_map").getItemContent()->isMap() == false) {
+        return false;
+    }
+
+    // add part to the complete map
+    completeMap->insert(component, jsonItem.get("thread_map").getItemContent()->copy()->toMap());
+
+    return true;
+}
+
+/**
+ * @brief request the thread-mapping of azuki itself
+ *
+ * @param completeMap pointer for the result to attach the thread-mapping of azuki
+ *
+ * @return always true
+ */
+bool
+ThreadBinder::makeInternalRequest(Kitsunemimi::DataMap* completeMap,
+                                  Kitsunemimi::ErrorContainer &)
+{
+    Kitsunemimi::ThreadHandler* threadHandler = Kitsunemimi::ThreadHandler::getInstance();
+    const std::vector<std::string> names = threadHandler->getRegisteredNames();
+    Kitsunemimi::DataMap* result = new Kitsunemimi::DataMap();
+
+    for(const std::string &name : names)
+    {
+        const std::vector<Kitsunemimi::Thread*> threads = threadHandler->getThreads(name);
+        Kitsunemimi::DataArray* threadArray = new Kitsunemimi::DataArray();
+        for(Kitsunemimi::Thread* thread : threads)
+        {
+            const std::vector<uint64_t> coreIds = thread->getCoreIds();
+            Kitsunemimi::DataArray* cores = new Kitsunemimi::DataArray();
+            for(const uint64_t coreId : coreIds) {
+                cores->append(new Kitsunemimi::DataValue(static_cast<long>(coreId)));
+            }
+            threadArray->append(cores);
+        }
+        result->insert(name, threadArray);
+    }
+
+    completeMap->insert("azuki", result);
+
+    return true;
+}
+
+/**
+ * @brief get thread-mapping of all components
+ *
+ * @param completeMap map with mapping of all threads of all components
+ * @param token token for the access to the other components
+ * @param error reference for error-output
+ *
+ * @return true, if successful, else false
+ */
+bool
+ThreadBinder::requestThreadMapping(Kitsunemimi::DataMap* completeMap,
+                                   const std::string &token,
+                                   Kitsunemimi::ErrorContainer &error)
+{
+    // create request
+    Kitsunemimi::Hanami::RequestMessage request;
+    request.id = "v1/get_thread_mapping";
+    request.httpType = Kitsunemimi::Hanami::GET_TYPE;
+    request.inputValues = "{ \"token\" : \"" + token + "\"}";
+
+    SupportedComponents* scomp = SupportedComponents::getInstance();
+
+    //----------------------------------------------------------------------------------------------
+    // request from azuki itself
+    if(makeInternalRequest(completeMap, error) == false) {
+        return false;
+    }
+    //----------------------------------------------------------------------------------------------
+    if(scomp->support[Kitsunemimi::Hanami::KYOUKO]
+            && requestComponent(completeMap, "kyouko", request, error) == false)
+    {
+        return false;
+    }
+    //----------------------------------------------------------------------------------------------
+    if(scomp->support[Kitsunemimi::Hanami::MISAKA]
+            && requestComponent(completeMap, "misaka", request, error) == false)
+    {
+        return false;
+    }
+    //----------------------------------------------------------------------------------------------
+    if(scomp->support[Kitsunemimi::Hanami::SAGIRI]
+            && requestComponent(completeMap, "sagiri", request, error) == false)
+    {
+        return false;
+    }
+    //----------------------------------------------------------------------------------------------
+    if(scomp->support[Kitsunemimi::Hanami::NAGATO]
+            && requestComponent(completeMap, "nagato", request, error) == false)
+    {
+        return false;
+    }
+    //----------------------------------------------------------------------------------------------
+    if(scomp->support[Kitsunemimi::Hanami::IZUNA]
+            && requestComponent(completeMap, "izuna", request, error) == false)
+    {
+        return false;
+    }
+    //----------------------------------------------------------------------------------------------
+    if(requestComponent(completeMap, "torii", request, error) == false) {
+        return false;
+    }
+    //----------------------------------------------------------------------------------------------
+
+    return true;
+}
+
+/**
+ * @brief fill lists with ids for the binding
+ *
+ * @param controlCoreIds reference to the list for all ids of control-processes
+ * @param processingCoreIds reference to the list for all ids of processing-processes
+ *
+ * @return false, if a list is empty, else true
+ */
+bool
+ThreadBinder::fillCoreIds(std::vector<uint64_t> &controlCoreIds,
+                          std::vector<uint64_t> &processingCoreIds)
+{
+    CpuCore* phyCore = nullptr;
+
+    // control-cores
+    phyCore = AzukiRoot::host->cpuPackages[0]->cpuCores[0];
+    for(CpuThread* singleThread : phyCore->cpuThreads) {
+        controlCoreIds.push_back(singleThread->threadId);
+    }
+
+    // processing-cores
+    for(uint64_t i = 1; i < AzukiRoot::host->cpuPackages[0]->cpuCores.size(); i++)
+    {
+        phyCore = AzukiRoot::host->cpuPackages[0]->cpuCores[i];
+        for(CpuThread* singleThread : phyCore->cpuThreads) {
+            processingCoreIds.push_back(singleThread->threadId);
+        }
+    }
+
+    if(controlCoreIds.size() == 0) {
+        // TODO: error
+        return false;
+    }
+
+    if(processingCoreIds.size() == 0) {
+        // TODO: error
+        return false;
+    }
+
+    return true;
+}
+
 /**
  * @brief ThreadBinder::run
  */
 void
 ThreadBinder::run()
 {
-    long coreId = 0;
+    if(fillCoreIds(m_controlCoreIds, m_processingCoreIds) == false) {
+        return;
+    }
 
     while(m_abort == false)
     {
+        m_mapLock.lock();
+
         Kitsunemimi::ErrorContainer error;
-        Kitsunemimi::DataMap completeMap;
 
         // get thread-mapping of all components
-        if(requestThreadMapping(&completeMap, *AzukiRoot::componentToken, error) == false) {
+        Kitsunemimi::DataMap newMapping;
+        if(requestThreadMapping(&newMapping, *AzukiRoot::componentToken, error) == false) {
             LOG_ERROR(error);
         }
 
-        // debug-output
-        //std::cout<<"#################################################################"<<std::endl;
-        //std::cout<<threadMapping->toString(true)<<std::endl;
-        //std::cout<<"#################################################################"<<std::endl;
-
-        // create request for thread-binding
-        Kitsunemimi::Hanami::RequestMessage request;
-        request.id = "bind_thread_to_core";
-        request.httpType = Kitsunemimi::Hanami::POST_TYPE;
-
-        // update thread-binding for all components
-        std::map<std::string,Kitsunemimi:: DataItem*>::const_iterator it;
-        for(it = completeMap.map.begin();
-            it != completeMap.map.end();
-            it++)
+        const std::string newMappingStr = newMapping.toString();
+        if(m_lastMapping != newMappingStr)
         {
-            const std::vector<std::string> threadNames = it->second->toMap()->getKeys();
-            if(it->first == "azuki") {
-                changeInternalCoreIds(threadNames, coreId);
-            } else {
-                changeRemoteCoreIds(it->first, request, threadNames, coreId);
+            // debug-output
+            //std::cout<<"#############################################################"<<std::endl;
+            //std::cout<<newMapping.toString(true)<<std::endl;
+            //std::cout<<"#############################################################"<<std::endl;
+
+            // create request for thread-binding
+            Kitsunemimi::Hanami::RequestMessage request;
+            request.id = "v1/bind_thread_to_core";
+            request.httpType = Kitsunemimi::Hanami::POST_TYPE;
+
+            // update thread-binding for all components
+            std::map<std::string,Kitsunemimi:: DataItem*>::const_iterator it;
+            for(it = newMapping.map.begin();
+                it != newMapping.map.end();
+                it++)
+            {
+                const std::vector<std::string> threadNames = it->second->toMap()->getKeys();
+                if(it->first == "azuki") {
+                    changeInternalCoreIds(threadNames, m_controlCoreIds);
+                } else {
+                    changeRemoteCoreIds(it->first, request, threadNames);
+                }
             }
+
+            m_lastMapping = newMappingStr;
         }
+
+        m_mapLock.unlock();
 
         sleep(10);
     }
+}
+
+/**
+ * @brief convert list to a string
+ *
+ * @param coreIds list with ids
+ *
+ * @return comma-separated string with the input-values
+ */
+const std::string
+ThreadBinder::convertCoreIdList(const std::vector<uint64_t> coreIds)
+{
+    std::string result = "";
+    for(uint64_t i = 0; i < coreIds.size(); i++)
+    {
+        if(i != 0) {
+            result.append(",");
+        }
+        result.append(std::to_string(coreIds[i]));
+    }
+
+    return result;
 }

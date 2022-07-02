@@ -33,9 +33,9 @@ public:
 
 protected:
     bool runTask(Kitsunemimi::Sakura::BlossomLeaf &blossomLeaf,
-                 const Kitsunemimi::DataMap &context,
-                 Kitsunemimi::Sakura::BlossomStatus &status,
-                 Kitsunemimi::ErrorContainer &error);
+                 const Kitsunemimi::DataMap &,
+                 Kitsunemimi::Sakura::BlossomStatus &,
+                 Kitsunemimi::ErrorContainer &);
 };
 
 #endif // AZUKIHEART_GETTHREADMAPPING_H

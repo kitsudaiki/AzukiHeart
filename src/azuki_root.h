@@ -25,7 +25,15 @@
 
 #include <string>
 
+#include <libKitsunemimiCommon/logger.h>
+
 class ThreadBinder;
+
+namespace Kitsunemimi {
+namespace Sakura {
+class Host;
+}
+}
 
 class AzukiRoot
 {
@@ -35,9 +43,8 @@ public:
     bool init();
 
     static std::string* componentToken;
-
-private:
-    ThreadBinder* m_threadBinder = nullptr;
+    static ThreadBinder* threadBinder;
+    static Kitsunemimi::Sakura::Host* host;
 };
 
 #endif // AZUKIHEART_AZUKIROOT_H
