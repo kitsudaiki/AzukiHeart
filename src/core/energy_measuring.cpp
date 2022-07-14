@@ -1,5 +1,5 @@
 /**
- * @file        misaka_root.h
+ * @file        energy_measuring.cpp
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,33 +20,35 @@
  *      limitations under the License.
  */
 
-#ifndef AZUKIHEART_AZUKIROOT_H
-#define AZUKIHEART_AZUKIROOT_H
+#include "energy_measuring.h"
+#include <azuki_root.h>
 
-#include <string>
+#include <libKitsunemimiSakuraHardware/host.h>
+#include <libKitsunemimiSakuraHardware/cpu_core.h>
+#include <libKitsunemimiSakuraHardware/cpu_package.h>
+#include <libKitsunemimiSakuraHardware/cpu_thread.h>
 
-#include <libKitsunemimiCommon/logger.h>
+#include <libKitsunemimiJson/json_item.h>
 
-class ThreadBinder;
-class EnergyMeasuring;
+using namespace Kitsunemimi::Sakura;
 
-namespace Kitsunemimi {
-namespace Sakura {
-class Host;
-}
-}
-
-class AzukiRoot
+EnergyMeasuring::EnergyMeasuring()
+    : Kitsunemimi::Thread("Azuki_EnergyMeasuring")
 {
-public:
-    AzukiRoot();
+}
 
-    bool init();
+/**
+ * @brief ThreadBinder::run
+ */
+void
+EnergyMeasuring::run()
+{
+    while(m_abort == false)
+    {
+        Kitsunemimi::ErrorContainer error;
 
-    static std::string* componentToken;
-    static ThreadBinder* threadBinder;
-    static EnergyMeasuring* energyMeasuring;
-    static Kitsunemimi::Sakura::Host* host;
-};
+        std::cout<<"power-consumption: "<<AzukiRoot::host->getPackage(0)->getTotalPackagePower()<<" W"<<std::endl;
 
-#endif // AZUKIHEART_AZUKIROOT_H
+        sleep(10);
+    }
+}
