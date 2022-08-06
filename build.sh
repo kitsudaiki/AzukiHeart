@@ -69,7 +69,7 @@ function get_required_private_repo_github () {
     NUMBER_OF_THREADS=$3
 
     # clone repo
-    git clone https://kitsudaiki:986ec116cd18aa45cfb81e57916518f6ff83bf19@github.com/kitsudaiki/$REPO_NAME.git "$PARENT_DIR/$REPO_NAME"
+    git clone https://kitsudaiki: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@github.com/kitsudaiki/$REPO_NAME.git "$PARENT_DIR/$REPO_NAME"
     cd "$PARENT_DIR/$REPO_NAME"
     git checkout $TAG_OR_BRANCH
 
@@ -93,25 +93,28 @@ echo ""
 echo "###########################################################################################################"
 echo ""
 get_required_private_repo_github "libKitsunemimiCpu" "v0.3.0" 8
-get_required_private_repo_github "libKitsunemimiCrypto" "v0.2.0" 8
-get_required_private_repo_github "libKitsunemimiJwt" "v0.4.1" 8
+get_required_private_repo_github "libKitsunemimiSqlite" "v0.3.0" 8
+get_required_private_repo_github "libKitsunemimiCrypto" "develop" 8
+get_required_private_repo_github "libKitsunemimiJwt" "develop" 8
 echo ""
 echo "###########################################################################################################"
 echo ""
 get_required_kitsune_lib_repo "libKitsunemimiSakuraNetwork" "v0.8.4" 8
 get_required_kitsune_lib_repo "libKitsunemimiSakuraLang" "v0.12.0" 1
 get_required_private_repo_github "libKitsunemimiSakuraHardware" "v0.1.1" 8
+get_required_private_repo_github "libKitsunemimiSakuraDatabase" "v0.5.0" 8
 echo ""
 echo "###########################################################################################################"
 echo ""
-get_required_private_repo_gitlab "libKitsunemimiHanamiCommon" "master" "2ue6RNxkCDs2A7qp1xtN" 8
-get_required_private_repo_gitlab "libKitsunemimiHanamiEndpoints" "v0.1.0" "ysR35grcGsLpFQiXXf1A" 1
-get_required_private_repo_gitlab "libKitsunemimiHanamiMessaging" "master" "vkEae-QF8jvt9W2xz3LR" 8
+get_required_private_repo_github "libKitsunemimiHanamiCommon" "develop" 8
+get_required_private_repo_github "libKitsunemimiHanamiEndpoints" "develop" 1
+get_required_private_repo_github "libKitsunemimiHanamiDatabase" "develop" 8
+get_required_private_repo_github "libKitsunemimiHanamiMessaging" "develop" 8
 echo ""
 echo "###########################################################################################################"
 echo ""
-get_required_private_repo_gitlab "libAzukiHeart" "master" "glpat-R3vZd81MXGVUTSxgHz1q" 8
-get_required_private_repo_gitlab "libMisakaGuard" "v0.1.0" "glpat-sUgJE_tJH_jV19zL8X_x" 8
+get_required_private_repo_github "libAzukiHeart" "develop" 8
+get_required_private_repo_github "libMisakiGuard" "develop" 8
 echo ""
 echo "###########################################################################################################"
 
