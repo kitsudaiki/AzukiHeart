@@ -9,10 +9,10 @@ LIBS += -L../libAzukiHeart/src/debug -lAzukiHeart
 LIBS += -L../libAzukiHeart/src/release -lAzukiHeart
 INCLUDEPATH += ../libAzukiHeart/include
 
-LIBS += -L../libMisakaGuard/src -lMisakaGuard
-LIBS += -L../libMisakaGuard/src/debug -lMisakaGuard
-LIBS += -L../libMisakaGuard/src/release -lMisakaGuard
-INCLUDEPATH += ../libMisakaGuard/include
+LIBS += -L../libMisakiGuard/src -lMisakiGuard
+LIBS += -L../libMisakiGuard/src/debug -lMisakiGuard
+LIBS += -L../libMisakiGuard/src/release -lMisakiGuard
+INCLUDEPATH += ../libMisakiGuard/include
 
 LIBS += -L../libKitsunemimiHanamiMessaging/src -lKitsunemimiHanamiMessaging
 LIBS += -L../libKitsunemimiHanamiMessaging/src/debug -lKitsunemimiHanamiMessaging
@@ -103,6 +103,7 @@ SOURCES += src/main.cpp \
     src/api/v1/system_info/get_system_info.cpp \
     src/api/v1/threading/get_thread_mapping.cpp \
     src/azuki_root.cpp \
+    src/core/energy_measuring.cpp \
     src/core/thread_binder.cpp
 
 HEADERS += \
@@ -113,4 +114,5 @@ HEADERS += \
     src/azuki_root.h \
     src/callbacks.h \
     src/config.h \
+    src/core/energy_measuring.h \
     src/core/thread_binder.h

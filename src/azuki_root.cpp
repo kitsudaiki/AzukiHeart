@@ -1,5 +1,5 @@
 ﻿/**
- * @file        misaka_root.cpp
+ * @file        azuki_root.cpp
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -24,6 +24,7 @@
 
 #include <api/blossom_initializing.h>
 #include <core/thread_binder.h>
+#include <core/energy_measuring.h>
 
 #include <libKitsunemimiConfig/config_handler.h>
 #include <libKitsunemimiCommon/files/text_file.h>
@@ -42,6 +43,7 @@ using Kitsunemimi::Sakura::SakuraLangInterface;
 
 std::string* AzukiRoot::componentToken = nullptr;
 ThreadBinder* AzukiRoot::threadBinder = nullptr;
+EnergyMeasuring* AzukiRoot::energyMeasuring = nullptr;
 Kitsunemimi::Sakura::Host* AzukiRoot::host = nullptr;
 
 /**
@@ -83,6 +85,10 @@ AzukiRoot::init()
     // create thread-binder
     AzukiRoot::threadBinder = new ThreadBinder();
     AzukiRoot::threadBinder->startThread();
+
+    // create thread-binder
+    AzukiRoot::energyMeasuring = new EnergyMeasuring();
+    AzukiRoot::energyMeasuring->startThread();
 
     return true;
 }

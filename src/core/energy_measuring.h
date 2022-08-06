@@ -1,5 +1,5 @@
 /**
- * @file        azuki_root.h
+ * @file        energy_measuring.h
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,33 +20,29 @@
  *      limitations under the License.
  */
 
-#ifndef AZUKIHEART_AZUKIROOT_H
-#define AZUKIHEART_AZUKIROOT_H
+#ifndef AZUKIHEART_ENERGYMEASURING_H
+#define AZUKIHEART_ENERGYMEASURING_H
 
-#include <string>
+#include <mutex>
 
+#include <libKitsunemimiCommon/threading/thread.h>
 #include <libKitsunemimiCommon/logger.h>
-
-class ThreadBinder;
-class EnergyMeasuring;
+#include <libKitsunemimiCommon/common_items/data_items.h>
 
 namespace Kitsunemimi {
-namespace Sakura {
-class Host;
+namespace Hanami {
+struct RequestMessage;
 }
 }
 
-class AzukiRoot
+class EnergyMeasuring
+        : public Kitsunemimi::Thread
 {
 public:
-    AzukiRoot();
+    EnergyMeasuring();
 
-    bool init();
-
-    static std::string* componentToken;
-    static ThreadBinder* threadBinder;
-    static EnergyMeasuring* energyMeasuring;
-    static Kitsunemimi::Sakura::Host* host;
+protected:
+    void run();
 };
 
-#endif // AZUKIHEART_AZUKIROOT_H
+#endif // AZUKIHEART_ENERGYMEASURING_H

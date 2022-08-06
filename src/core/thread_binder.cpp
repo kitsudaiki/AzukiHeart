@@ -265,8 +265,8 @@ ThreadBinder::requestThreadMapping(Kitsunemimi::DataMap* completeMap,
         return false;
     }
     //----------------------------------------------------------------------------------------------
-    if(scomp->support[Kitsunemimi::Hanami::MISAKA]
-            && requestComponent(completeMap, "misaka", request, error) == false)
+    if(scomp->support[Kitsunemimi::Hanami::MISAKI]
+            && requestComponent(completeMap, "misaki", request, error) == false)
     {
         return false;
     }
@@ -277,14 +277,14 @@ ThreadBinder::requestThreadMapping(Kitsunemimi::DataMap* completeMap,
         return false;
     }
     //----------------------------------------------------------------------------------------------
-    if(scomp->support[Kitsunemimi::Hanami::NAGATO]
-            && requestComponent(completeMap, "nagato", request, error) == false)
+    if(scomp->support[Kitsunemimi::Hanami::NOZOMI]
+            && requestComponent(completeMap, "nozomi", request, error) == false)
     {
         return false;
     }
     //----------------------------------------------------------------------------------------------
-    if(scomp->support[Kitsunemimi::Hanami::IZUNA]
-            && requestComponent(completeMap, "izuna", request, error) == false)
+    if(scomp->support[Kitsunemimi::Hanami::INORI]
+            && requestComponent(completeMap, "inori", request, error) == false)
     {
         return false;
     }
