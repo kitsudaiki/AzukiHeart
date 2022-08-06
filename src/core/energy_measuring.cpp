@@ -47,7 +47,10 @@ EnergyMeasuring::run()
     {
         Kitsunemimi::ErrorContainer error;
 
-        std::cout<<"power-consumption: "<<AzukiRoot::host->getPackage(0)->getTotalPackagePower()<<" W"<<std::endl;
+        double power = 0.0;
+        for(uint64_t i = 0; i < AzukiRoot::host->cpuPackages.size(); i++) {
+            power += AzukiRoot::host->getPackage(i)->getTotalPackagePower();
+        }
 
         sleep(10);
     }

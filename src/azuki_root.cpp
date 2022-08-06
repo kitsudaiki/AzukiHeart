@@ -1,5 +1,5 @@
 ﻿/**
- * @file        misaka_root.cpp
+ * @file        azuki_root.cpp
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -84,7 +84,7 @@ AzukiRoot::init()
 
     // create thread-binder
     AzukiRoot::threadBinder = new ThreadBinder();
-    //AzukiRoot::threadBinder->startThread();
+    AzukiRoot::threadBinder->startThread();
 
     // create thread-binder
     AzukiRoot::energyMeasuring = new EnergyMeasuring();
