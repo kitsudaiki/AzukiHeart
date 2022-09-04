@@ -32,7 +32,7 @@
 #include <libKitsunemimiJwt/jwt.h>
 
 #include <libKitsunemimiHanamiCommon/component_support.h>
-#include <libKitsunemimiHanamiMessaging/hanami_messaging.h>
+#include <libKitsunemimiHanamiNetwork/hanami_messaging.h>
 
 #include <libKitsunemimiSakuraHardware/host.h>
 
