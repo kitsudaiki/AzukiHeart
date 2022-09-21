@@ -30,6 +30,7 @@
 
 #include <api/v1/system_info/get_system_info.h>
 #include <api/v1/threading/get_thread_mapping.h>
+#include <api/v1/measurements/power_consumption.h>
 
 using Kitsunemimi::Sakura::SakuraLangInterface;
 
@@ -52,6 +53,13 @@ initBlossoms()
                                   Kitsunemimi::Hanami::BLOSSOM_TYPE,
                                   "threading",
                                   "get_mapping"));
+
+    assert(interface->addBlossom("measurements", "get_power_consumption", new PowerConsumption()));
+    assert(endpoints->addEndpoint("v1/power_consumption",
+                                  Kitsunemimi::Hanami::GET_TYPE,
+                                  Kitsunemimi::Hanami::BLOSSOM_TYPE,
+                                  "measurements",
+                                  "get_power_consumption"));
 }
 
 #endif // AZUKIHEART_BLOSSOM_INITIALIZING_H

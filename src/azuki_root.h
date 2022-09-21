@@ -28,7 +28,7 @@
 #include <libKitsunemimiCommon/logger.h>
 
 class ThreadBinder;
-class EnergyMeasuring;
+class PowerMeasuring;
 
 namespace Kitsunemimi {
 namespace Sakura {
@@ -45,7 +45,7 @@ public:
 
     static std::string* componentToken;
     static ThreadBinder* threadBinder;
-    static EnergyMeasuring* energyMeasuring;
+    static PowerMeasuring* powerMeasuring;
     static Kitsunemimi::Sakura::Host* host;
 };
 
