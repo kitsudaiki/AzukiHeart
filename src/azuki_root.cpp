@@ -43,7 +43,7 @@ using Kitsunemimi::Sakura::SakuraLangInterface;
 
 std::string* AzukiRoot::componentToken = nullptr;
 ThreadBinder* AzukiRoot::threadBinder = nullptr;
-EnergyMeasuring* AzukiRoot::energyMeasuring = nullptr;
+PowerMeasuring* AzukiRoot::powerMeasuring = nullptr;
 Kitsunemimi::Sakura::Host* AzukiRoot::host = nullptr;
 
 /**
@@ -87,8 +87,8 @@ AzukiRoot::init()
     AzukiRoot::threadBinder->startThread();
 
     // create thread-binder
-    AzukiRoot::energyMeasuring = new EnergyMeasuring();
-    AzukiRoot::energyMeasuring->startThread();
+    AzukiRoot::powerMeasuring = new PowerMeasuring();
+    AzukiRoot::powerMeasuring->startThread();
 
     return true;
 }

@@ -22,6 +22,7 @@
 
 #include "energy_measuring.h"
 #include <azuki_root.h>
+#include <core/value_container.h>
 
 #include <libKitsunemimiSakuraHardware/host.h>
 #include <libKitsunemimiSakuraHardware/cpu_core.h>
@@ -32,26 +33,40 @@
 
 using namespace Kitsunemimi::Sakura;
 
-EnergyMeasuring::EnergyMeasuring()
+PowerMeasuring::PowerMeasuring()
     : Kitsunemimi::Thread("Azuki_EnergyMeasuring")
 {
+    m_valueContainer = new ValueContainer();
+}
+
+PowerMeasuring::~PowerMeasuring()
+{
+    delete m_valueContainer;
+}
+
+Kitsunemimi::DataMap*
+PowerMeasuring::getJson()
+{
+    return m_valueContainer->toJson();
 }
 
 /**
  * @brief ThreadBinder::run
  */
 void
-EnergyMeasuring::run()
+PowerMeasuring::run()
 {
+
+    Kitsunemimi::ErrorContainer error;
     while(m_abort == false)
     {
-        Kitsunemimi::ErrorContainer error;
-
         double power = 0.0;
         for(uint64_t i = 0; i < AzukiRoot::host->cpuPackages.size(); i++) {
             power += AzukiRoot::host->getPackage(i)->getTotalPackagePower();
         }
 
-        sleep(10);
+        m_valueContainer->addValue(power);
+
+        sleep(1);
     }
 }

@@ -1,5 +1,5 @@
 /**
- * @file        energy_measuring.h
+ * @file        value_container.h
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,37 +20,41 @@
  *      limitations under the License.
  */
 
-#ifndef AZUKIHEART_ENERGYMEASURING_H
-#define AZUKIHEART_ENERGYMEASURING_H
+#ifndef VALUECONTAINER_H
+#define VALUECONTAINER_H
 
-#include <mutex>
+#include <vector>
+#include <string>
+#include <stdint.h>
 
-#include <libKitsunemimiCommon/threading/thread.h>
-#include <libKitsunemimiCommon/logger.h>
 #include <libKitsunemimiCommon/items/data_items.h>
 
-namespace Kitsunemimi {
-namespace Hanami {
-struct RequestMessage;
-}
-}
-
-class ValueContainer;
-
-class PowerMeasuring
-        : public Kitsunemimi::Thread
+class ValueContainer
 {
 public:
-    PowerMeasuring();
-    ~PowerMeasuring();
+    ValueContainer();
 
-    Kitsunemimi::DataMap* getJson();
-
-protected:
-    void run();
+    void addValue(const float newValue);
+    void toJsonString(std::string &result);
+    Kitsunemimi::DataMap* toJson();
 
 private:
-    ValueContainer* m_valueContainer;
+    struct ValueSection
+    {
+        std::vector<float> values;
+        uint64_t pos = 0;
+
+        ValueSection(const uint64_t numberOfValues)
+        {
+            values = std::vector<float>(numberOfValues, 0.0f);
+        }
+    };
+
+    std::vector<ValueSection> m_valueSections;
+
+    void addValue(const float newValue, const uint64_t sectionId);
+    void appendSectionToJsonString(std::string &result, const uint64_t sectionId);
+    Kitsunemimi::DataArray* appendSectionToJson(const uint64_t sectionId);
 };
 
-#endif // AZUKIHEART_ENERGYMEASURING_H
+#endif // VALUECONTAINER_H
