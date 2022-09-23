@@ -29,8 +29,11 @@
 #include <libKitsunemimiHanamiEndpoints/endpoint.h>
 
 #include <api/v1/system_info/get_system_info.h>
+
 #include <api/v1/threading/get_thread_mapping.h>
+
 #include <api/v1/measurements/power_consumption.h>
+#include <api/v1/measurements/temperature_production.h>
 
 using Kitsunemimi::Sakura::SakuraLangInterface;
 
@@ -60,6 +63,15 @@ initBlossoms()
                                   Kitsunemimi::Hanami::BLOSSOM_TYPE,
                                   "measurements",
                                   "get_power_consumption"));
+
+    assert(interface->addBlossom("measurements",
+                                 "get_temperature_production",
+                                 new TemperatureProduction()));
+    assert(endpoints->addEndpoint("v1/temperature_production",
+                                  Kitsunemimi::Hanami::GET_TYPE,
+                                  Kitsunemimi::Hanami::BLOSSOM_TYPE,
+                                  "measurements",
+                                  "get_temperature_production"));
 }
 
 #endif // AZUKIHEART_BLOSSOM_INITIALIZING_H

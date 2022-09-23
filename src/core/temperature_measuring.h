@@ -1,5 +1,5 @@
 /**
- * @file        azuki_root.h
+ * @file        temperature_measuring.h
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,35 +20,37 @@
  *      limitations under the License.
  */
 
-#ifndef AZUKIHEART_AZUKIROOT_H
-#define AZUKIHEART_AZUKIROOT_H
+#ifndef AZUKIHEART_TEMPERATURE_MEASURING_H
+#define AZUKIHEART_TEMPERATURE_MEASURING_H
 
-#include <string>
+#include <mutex>
 
+#include <libKitsunemimiCommon/threading/thread.h>
 #include <libKitsunemimiCommon/logger.h>
-
-class ThreadBinder;
-class PowerMeasuring;
-class TemperatureMeasuring;
+#include <libKitsunemimiCommon/items/data_items.h>
 
 namespace Kitsunemimi {
-namespace Sakura {
-class Host;
+namespace Hanami {
+struct RequestMessage;
 }
 }
 
-class AzukiRoot
+class ValueContainer;
+
+class TemperatureMeasuring
+        : public Kitsunemimi::Thread
 {
 public:
-    AzukiRoot();
+    TemperatureMeasuring();
+    ~TemperatureMeasuring();
 
-    bool init();
+    Kitsunemimi::DataMap* getJson();
 
-    static std::string* componentToken;
-    static ThreadBinder* threadBinder;
-    static PowerMeasuring* powerMeasuring;
-    static TemperatureMeasuring* temperatureMeasuring;
-    static Kitsunemimi::Sakura::Host* host;
+protected:
+    void run();
+
+private:
+    ValueContainer* m_valueContainer;
 };
 
-#endif // AZUKIHEART_AZUKIROOT_H
+#endif // AZUKIHEART_TEMPERATURE_MEASURING_H
