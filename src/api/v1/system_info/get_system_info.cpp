@@ -32,8 +32,7 @@ using namespace Kitsunemimi::Sakura;
 GetSystemInfo::GetSystemInfo()
     : Kitsunemimi::Sakura::Blossom("Get all available information of the local system.\n"
                                    "    - Topology of the cpu-resources\n"
-                                   "    - Speed of the cpu\n"
-                                   "    - Energy-consumption of the cpu list")
+                                   "    - Speed of the cpu")
 {
     //----------------------------------------------------------------------------------------------
     // output
