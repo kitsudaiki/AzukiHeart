@@ -1,5 +1,5 @@
 /**
- * @file        energy_measuring.h
+ * @file        power_measuring.h
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,8 +20,8 @@
  *      limitations under the License.
  */
 
-#ifndef AZUKIHEART_ENERGYMEASURING_H
-#define AZUKIHEART_ENERGYMEASURING_H
+#ifndef AZUKIHEART_POWER_MEASURING_H
+#define AZUKIHEART_POWER_MEASURING_H
 
 #include <mutex>
 
@@ -53,4 +53,4 @@ private:
     ValueContainer* m_valueContainer;
 };
 
-#endif // AZUKIHEART_ENERGYMEASURING_H
+#endif // AZUKIHEART_POWER_MEASURING_H

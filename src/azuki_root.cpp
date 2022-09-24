@@ -24,7 +24,7 @@
 
 #include <api/blossom_initializing.h>
 #include <core/thread_binder.h>
-#include <core/energy_measuring.h>
+#include <core/power_measuring.h>
 #include <core/temperature_measuring.h>
 
 #include <libKitsunemimiConfig/config_handler.h>

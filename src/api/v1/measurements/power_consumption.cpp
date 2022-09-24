@@ -1,6 +1,6 @@
 #include "power_consumption.h"
 #include <azuki_root.h>
-#include <core/energy_measuring.h>
+#include <core/power_measuring.h>
 
 using namespace Kitsunemimi::Sakura;
 

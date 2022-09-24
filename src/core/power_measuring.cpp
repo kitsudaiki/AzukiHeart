@@ -1,5 +1,5 @@
 /**
- * @file        energy_measuring.cpp
+ * @file        power_measuring.cpp
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,7 +20,7 @@
  *      limitations under the License.
  */
 
-#include "energy_measuring.h"
+#include "power_measuring.h"
 #include <azuki_root.h>
 #include <core/value_container.h>
 
@@ -56,13 +56,20 @@ PowerMeasuring::getJson()
 void
 PowerMeasuring::run()
 {
-
     Kitsunemimi::ErrorContainer error;
     while(m_abort == false)
     {
         double power = 0.0;
         for(uint64_t i = 0; i < AzukiRoot::host->cpuPackages.size(); i++) {
             power += AzukiRoot::host->getPackage(i)->getTotalPackagePower();
+        }
+
+        // HINT(kitsudaiki): first tests were made on a notebook. When this notebook came from
+        // standby, then there was a single extremly high value, which broke the outout.
+        // So this is only a workaround for this edge-case. I this there is no node,
+        // which takes more then 1MW per node and so this workaround shouldn't break any setup.
+        if(power > 1000000.0) {
+            power = 0.0f;
         }
 
         m_valueContainer->addValue(power);

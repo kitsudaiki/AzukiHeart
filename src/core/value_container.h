@@ -20,8 +20,8 @@
  *      limitations under the License.
  */
 
-#ifndef VALUECONTAINER_H
-#define VALUECONTAINER_H
+#ifndef AZUKIHEART_VALUECONTAINER_H
+#define AZUKIHEART_VALUECONTAINER_H
 
 #include <vector>
 #include <string>
@@ -35,7 +35,6 @@ public:
     ValueContainer();
 
     void addValue(const float newValue);
-    void toJsonString(std::string &result);
     Kitsunemimi::DataMap* toJson();
 
 private:
@@ -53,8 +52,7 @@ private:
     std::vector<ValueSection> m_valueSections;
 
     void addValue(const float newValue, const uint64_t sectionId);
-    void appendSectionToJsonString(std::string &result, const uint64_t sectionId);
     Kitsunemimi::DataArray* appendSectionToJson(const uint64_t sectionId);
 };
 
-#endif // VALUECONTAINER_H
+#endif // AZUKIHEART_VALUECONTAINER_H

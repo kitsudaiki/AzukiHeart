@@ -23,19 +23,20 @@
 #include "value_container.h"
 
 /**
- * @brief ValueContainer::ValueContainer
+ * @brief constructor
  */
 ValueContainer::ValueContainer()
 {
     m_valueSections.push_back(ValueSection(60));
     m_valueSections.push_back(ValueSection(60));
     m_valueSections.push_back(ValueSection(24));
-    m_valueSections.push_back(ValueSection(100));
+    m_valueSections.push_back(ValueSection(365));
 }
 
 /**
- * @brief ValueContainer::addValue
- * @param newValue
+ * @brief add new value
+ *
+ * @param newValue new value to add the the list of seconds
  */
 void
 ValueContainer::addValue(const float newValue)
@@ -44,9 +45,10 @@ ValueContainer::addValue(const float newValue)
 }
 
 /**
- * @brief ValueContainer::addValue
- * @param newValue
- * @param sectionId
+ * @brief add new value to a specific value-section
+ *
+ * @param newValue new value to add
+ * @param sectionId position of the value-section inside the vector
  */
 void
 ValueContainer::addValue(const float newValue, const uint64_t sectionId)
@@ -78,27 +80,9 @@ ValueContainer::addValue(const float newValue, const uint64_t sectionId)
 }
 
 /**
- * @brief ValueContainer::toJsonString
- * @param result
- */
-void
-ValueContainer::toJsonString(std::string &result)
-{
-    result.append("{");
-    result.append("\"seconds\":[");
-    appendSectionToJsonString(result, 0);
-    result.append("],\n\"minutes\":[");
-    appendSectionToJsonString(result, 1);
-    result.append("],\n\"hours\":[");
-    appendSectionToJsonString(result, 2);
-    result.append("],\n\"days\":[");
-    appendSectionToJsonString(result, 3);
-    result.append("]}");
-}
-
-/**
- * @brief ValueContainer::toJson
- * @param result
+ * @brief convert all value-sections to a json-like object
+ *
+ * @param result data-item with all information
  */
 Kitsunemimi::DataMap*
 ValueContainer::toJson()
@@ -112,34 +96,11 @@ ValueContainer::toJson()
 }
 
 /**
- * @brief ValueContainer::appendSectionToJson
- * @param result
- * @param sectionId
- */
-void
-ValueContainer::appendSectionToJsonString(std::string &result, const uint64_t sectionId)
-{
-    // precheck
-    if(sectionId >= m_valueSections.size()) {
-        return;
-    }
-
-    ValueSection* tempValueSection = &m_valueSections[sectionId];
-    uint64_t pos = tempValueSection->pos;
-    for(uint64_t i = 0; i < tempValueSection->values.size(); i++)
-    {
-        if(i > 0) {
-            result.append(",");
-        }
-        result.append(std::to_string(tempValueSection->values.at(pos)));
-        pos = (pos + 1) % tempValueSection->values.size();
-    }
-}
-
-/**
- * @brief ValueContainer::appendSectionToJson
- * @param result
- * @param sectionId
+ * @brief convert all value of a value-section into a json-like array object
+ *
+ * @param sectionId id of the value-section, which should be converted
+ *
+ * @return data-item with all value of the selected value-section
  */
 Kitsunemimi::DataArray*
 ValueContainer::appendSectionToJson(const uint64_t sectionId)
@@ -149,6 +110,7 @@ ValueContainer::appendSectionToJson(const uint64_t sectionId)
         return nullptr;
     }
 
+    // fill value in a array
     Kitsunemimi::DataArray* valueList = new Kitsunemimi::DataArray();
     ValueSection* tempValueSection = &m_valueSections[sectionId];
     uint64_t pos = tempValueSection->pos;
