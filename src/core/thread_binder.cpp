@@ -118,7 +118,7 @@ ThreadBinder::changeRemoteCoreIds(const std::string &component,
 
         request.inputValues.append("],\"thread_name\":\"" + name + "\"}");
 
-        // get internal client for interaction with sagiri
+        // get internal client for interaction with shiori
         HanamiMessagingClient* client = HanamiMessaging::getInstance()->getOutgoingClient(component);
         if(client == nullptr)
         {
@@ -159,7 +159,7 @@ ThreadBinder::requestComponent(Kitsunemimi::DataMap* completeMap,
                                const Kitsunemimi::Hanami::RequestMessage &request,
                                Kitsunemimi::ErrorContainer &error)
 {
-    // get internal client for interaction with sagiri
+    // get internal client for interaction with shiori
     HanamiMessagingClient* client = HanamiMessaging::getInstance()->getOutgoingClient(component);
     if(client == nullptr)
     {
@@ -271,8 +271,8 @@ ThreadBinder::requestThreadMapping(Kitsunemimi::DataMap* completeMap,
         return false;
     }
     //----------------------------------------------------------------------------------------------
-    if(scomp->support[Kitsunemimi::Hanami::SAGIRI]
-            && requestComponent(completeMap, "sagiri", request, error) == false)
+    if(scomp->support[Kitsunemimi::Hanami::SHIORI]
+            && requestComponent(completeMap, "shiori", request, error) == false)
     {
         return false;
     }
