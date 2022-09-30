@@ -46,12 +46,12 @@ PowerConsumption::PowerConsumption()
  * @brief runTask
  */
 bool
-PowerConsumption::runTask(BlossomLeaf &blossomLeaf,
+PowerConsumption::runTask(BlossomIO &blossomIO,
                           const Kitsunemimi::DataMap &,
                           BlossomStatus &,
                           Kitsunemimi::ErrorContainer &)
 {
-    blossomLeaf.output.insert("power", AzukiRoot::powerMeasuring->getJson());
+    blossomIO.output.insert("power", AzukiRoot::powerMeasuring->getJson());
 
     return true;
 }

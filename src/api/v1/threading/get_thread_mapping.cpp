@@ -55,12 +55,12 @@ GetThreadMapping::GetThreadMapping()
  * @brief runTask
  */
 bool
-GetThreadMapping::runTask(BlossomLeaf &blossomLeaf,
+GetThreadMapping::runTask(BlossomIO &blossomIO,
                           const Kitsunemimi::DataMap &,
                           BlossomStatus &,
                           Kitsunemimi::ErrorContainer &)
 {
-    blossomLeaf.output.insert("thread_map", AzukiRoot::threadBinder->getMapping());
+    blossomIO.output.insert("thread_map", AzukiRoot::threadBinder->getMapping());
 
     return true;
 }
