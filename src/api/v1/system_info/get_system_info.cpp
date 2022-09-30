@@ -51,13 +51,13 @@ GetSystemInfo::GetSystemInfo()
  * @brief runTask
  */
 bool
-GetSystemInfo::runTask(BlossomLeaf &blossomLeaf,
+GetSystemInfo::runTask(BlossomIO &blossomIO,
                        const Kitsunemimi::DataMap &,
                        BlossomStatus &,
                        Kitsunemimi::ErrorContainer &)
 {
     // creat output
-    blossomLeaf.output.insert("info", AzukiRoot::host->toJson());
+    blossomIO.output.insert("info", AzukiRoot::host->toJson());
 
     return true;
 }

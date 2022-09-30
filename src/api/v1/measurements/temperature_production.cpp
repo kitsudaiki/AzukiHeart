@@ -46,12 +46,12 @@ TemperatureProduction::TemperatureProduction()
  * @brief runTask
  */
 bool
-TemperatureProduction::runTask(BlossomLeaf &blossomLeaf,
+TemperatureProduction::runTask(BlossomIO &blossomIO,
                                 const Kitsunemimi::DataMap &,
                                 BlossomStatus &,
                                 Kitsunemimi::ErrorContainer &)
 {
-    blossomLeaf.output.insert("temperature", AzukiRoot::temperatureMeasuring->getJson());
+    blossomIO.output.insert("temperature", AzukiRoot::temperatureMeasuring->getJson());
 
     return true;
 }
