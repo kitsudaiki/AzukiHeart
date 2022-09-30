@@ -364,6 +364,7 @@ ThreadBinder::run()
         const std::string newMappingStr = newMapping.toString();
         if(m_lastMapping != newMappingStr)
         {
+            m_completeMap = newMapping;
             // debug-output
             //std::cout<<"#############################################################"<<std::endl;
             //std::cout<<newMapping.toString(true)<<std::endl;
