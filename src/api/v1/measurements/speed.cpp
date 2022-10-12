@@ -1,5 +1,5 @@
 /**
- * @file        temperature_production.cpp
+ * @file        speed.cpp
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,22 +20,22 @@
  *      limitations under the License.
  */
 
-#include "temperature_production.h"
+#include "speed.h"
 #include <azuki_root.h>
-#include <core/temperature_measuring.h>
+#include <core/speed_measuring.h>
 
 using namespace Kitsunemimi::Sakura;
 
-ThermalProduction::ThermalProduction()
-    : Kitsunemimi::Sakura::Blossom("Request the temperature-measurement of the CPU")
+Speed::Speed()
+    : Kitsunemimi::Sakura::Blossom("Request the speed of the CPU")
 {
     //----------------------------------------------------------------------------------------------
     // output
     //----------------------------------------------------------------------------------------------
 
-    registerOutputField("temperature",
+    registerOutputField("current_speed",
                         SAKURA_MAP_TYPE,
-                        "Json-object with temperature-measurements");
+                        "Json-object with current-speed-measurements");
 
     //----------------------------------------------------------------------------------------------
     //
@@ -46,12 +46,12 @@ ThermalProduction::ThermalProduction()
  * @brief runTask
  */
 bool
-ThermalProduction::runTask(BlossomIO &blossomIO,
-                                const Kitsunemimi::DataMap &,
-                                BlossomStatus &,
-                                Kitsunemimi::ErrorContainer &)
+Speed::runTask(BlossomIO &blossomIO,
+               const Kitsunemimi::DataMap &,
+               BlossomStatus &,
+               Kitsunemimi::ErrorContainer &)
 {
-    blossomIO.output.insert("temperature", AzukiRoot::temperatureMeasuring->getJson());
+    blossomIO.output.insert("current_speed", AzukiRoot::speedMeasuring->getJson());
 
     return true;
 }

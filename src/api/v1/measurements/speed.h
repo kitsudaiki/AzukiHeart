@@ -1,5 +1,5 @@
 /**
- * @file        azuki_root.h
+ * @file        speed.h
  *
  * @author      Tobias Anker <tobias.anker@kitsunemimi.moe>
  *
@@ -20,37 +20,22 @@
  *      limitations under the License.
  */
 
-#ifndef AZUKIHEART_AZUKIROOT_H
-#define AZUKIHEART_AZUKIROOT_H
+#ifndef AZUKIHEART_SPEED_H
+#define AZUKIHEART_SPEED_H
 
-#include <string>
+#include <libKitsunemimiSakuraLang/blossom.h>
 
-#include <libKitsunemimiCommon/logger.h>
-
-class ThreadBinder;
-class SpeedMeasuring;
-class PowerMeasuring;
-class TemperatureMeasuring;
-
-namespace Kitsunemimi {
-namespace Sakura {
-class Host;
-}
-}
-
-class AzukiRoot
+class Speed
+        : public Kitsunemimi::Sakura::Blossom
 {
 public:
-    AzukiRoot();
+    Speed();
 
-    bool init();
-
-    static std::string* componentToken;
-    static ThreadBinder* threadBinder;
-    static SpeedMeasuring* speedMeasuring;
-    static PowerMeasuring* powerMeasuring;
-    static TemperatureMeasuring* temperatureMeasuring;
-    static Kitsunemimi::Sakura::Host* host;
+protected:
+    bool runTask(Kitsunemimi::Sakura::BlossomIO &blossomIO,
+                 const Kitsunemimi::DataMap &,
+                 Kitsunemimi::Sakura::BlossomStatus &,
+                 Kitsunemimi::ErrorContainer &);
 };
 
-#endif // AZUKIHEART_AZUKIROOT_H
+#endif // AZUKIHEART_SPEED_H

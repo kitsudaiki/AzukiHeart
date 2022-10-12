@@ -25,6 +25,7 @@
 #include <api/blossom_initializing.h>
 #include <core/thread_binder.h>
 #include <core/power_measuring.h>
+#include <core/speed_measuring.h>
 #include <core/temperature_measuring.h>
 
 #include <libKitsunemimiConfig/config_handler.h>
@@ -45,6 +46,7 @@ using Kitsunemimi::Sakura::SakuraLangInterface;
 std::string* AzukiRoot::componentToken = nullptr;
 ThreadBinder* AzukiRoot::threadBinder = nullptr;
 PowerMeasuring* AzukiRoot::powerMeasuring = nullptr;
+SpeedMeasuring* AzukiRoot::speedMeasuring = nullptr;
 TemperatureMeasuring* AzukiRoot::temperatureMeasuring = nullptr;
 Kitsunemimi::Sakura::Host* AzukiRoot::host = nullptr;
 
@@ -91,6 +93,10 @@ AzukiRoot::init()
     // create power-measuring-loop
     AzukiRoot::powerMeasuring = new PowerMeasuring();
     AzukiRoot::powerMeasuring->startThread();
+
+    // create speed-measuring-loop
+    AzukiRoot::speedMeasuring = new SpeedMeasuring();
+    AzukiRoot::speedMeasuring->startThread();
 
     // create temperature-measuring-loop
     AzukiRoot::temperatureMeasuring = new TemperatureMeasuring();

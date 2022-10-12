@@ -101,11 +101,13 @@ INCLUDEPATH += $$PWD \
 
 SOURCES += src/main.cpp \
     src/api/v1/measurements/power_consumption.cpp \
+    src/api/v1/measurements/speed.cpp \
     src/api/v1/measurements/temperature_production.cpp \
     src/api/v1/system_info/get_system_info.cpp \
     src/api/v1/threading/get_thread_mapping.cpp \
     src/azuki_root.cpp \
     src/core/power_measuring.cpp \
+    src/core/speed_measuring.cpp \
     src/core/temperature_measuring.cpp \
     src/core/thread_binder.cpp \
     src/core/value_container.cpp
@@ -113,6 +115,7 @@ SOURCES += src/main.cpp \
 HEADERS += \
     src/api/blossom_initializing.h \
     src/api/v1/measurements/power_consumption.h \
+    src/api/v1/measurements/speed.h \
     src/api/v1/measurements/temperature_production.h \
     src/api/v1/system_info/get_system_info.h \
     src/api/v1/threading/get_thread_mapping.h \
@@ -121,6 +124,7 @@ HEADERS += \
     src/callbacks.h \
     src/config.h \
     src/core/power_measuring.h \
+    src/core/speed_measuring.h \
     src/core/temperature_measuring.h \
     src/core/thread_binder.h \
     src/core/value_container.h

@@ -25,11 +25,11 @@
 
 #include <libKitsunemimiSakuraLang/blossom.h>
 
-class TemperatureProduction
+class ThermalProduction
         : public Kitsunemimi::Sakura::Blossom
 {
 public:
-    TemperatureProduction();
+    ThermalProduction();
 
 protected:
     bool runTask(Kitsunemimi::Sakura::BlossomIO &blossomIO,
