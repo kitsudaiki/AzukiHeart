@@ -34,6 +34,7 @@
 
 #include <api/v1/measurements/power_consumption.h>
 #include <api/v1/measurements/temperature_production.h>
+#include <api/v1/measurements/speed.h>
 
 using Kitsunemimi::Sakura::SakuraLangInterface;
 
@@ -64,9 +65,16 @@ initBlossoms()
                                   "measurements",
                                   "get_power_consumption"));
 
+    assert(interface->addBlossom("measurements", "get_speed", new Speed()));
+    assert(endpoints->addEndpoint("v1/speed",
+                                  Kitsunemimi::Hanami::GET_TYPE,
+                                  Kitsunemimi::Hanami::BLOSSOM_TYPE,
+                                  "measurements",
+                                  "get_speed"));
+
     assert(interface->addBlossom("measurements",
                                  "get_temperature_production",
-                                 new TemperatureProduction()));
+                                 new ThermalProduction()));
     assert(endpoints->addEndpoint("v1/temperature_production",
                                   Kitsunemimi::Hanami::GET_TYPE,
                                   Kitsunemimi::Hanami::BLOSSOM_TYPE,
