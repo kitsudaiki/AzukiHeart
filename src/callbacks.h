@@ -72,8 +72,6 @@ inline void
 handleSetCpuSpeedRequest(const Azuki::SetCpuSpeed_Message &msg)
 {
     // TODO: move the setting of the speed correctly to libKitsunemimiSakuraHardware
-    std::cout<<"poi2"<<std::endl;
-
     Kitsunemimi::ErrorContainer error;
     uint64_t numberCpuThreads = 0;
     uint64_t minimumSpeed = 0;
@@ -138,7 +136,6 @@ genericCallback(Kitsunemimi::Sakura::Session* session,
                 const uint64_t blockerId)
 {
     u_int8_t* u8Data = static_cast<uint8_t*>(data);
-    std::cout<<"poi1"<<std::endl;
     switch(u8Data[6])
     {
         case Azuki::SET_CPU_SPEED_MESSAGE_TYPE:
