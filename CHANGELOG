@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.3.0] - 2022-10-17
+
+### Added
+- add measuring
+    - cpu-frequency
+    - cpu-temperature
+    - cpu-power-consumption
+
+### Changed
+- pack user-information into structs
+- renamings coming from dependencies
+
+
 ## [0.2.0] - 2022-07-02
 
 ### Changed
