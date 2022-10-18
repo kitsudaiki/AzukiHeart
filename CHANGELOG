@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.3.1] - 2022-10-18
+
+### Fixed
+- fixed false tag in build-script
+
+
 ## [0.3.0] - 2022-10-17
 
 ### Added
