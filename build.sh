@@ -62,7 +62,7 @@ get_required_kitsune_lib_repo "libKitsunemimiConfig" "v0.5.0" 8
 get_required_kitsune_lib_repo "libKitsunemimiCrypto" "v0.3.0" 8
 get_required_kitsune_lib_repo "libKitsunemimiJwt" "v0.5.1" 8
 get_required_kitsune_lib_repo "libKitsunemimiSqlite" "v0.4.0" 8
-get_required_kitsune_lib_repo "libKitsunemimiCpu" "v0.4." 8
+get_required_kitsune_lib_repo "libKitsunemimiCpu" "v0.4.1" 8
 echo ""
 echo "###########################################################################################################"
 echo ""
