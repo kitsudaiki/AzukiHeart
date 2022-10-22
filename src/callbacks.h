@@ -33,7 +33,8 @@
 #include <libKitsunemimiSakuraHardware/cpu_thread.h>
 #include <libKitsunemimiSakuraHardware/host.h>
 
-#include <libAzukiHeart/azuki_messages.h>
+#include <../libKitsunemimiHanamiMessages/protobuffers/azuki_messages.proto3.pb.h>
+#include <../libKitsunemimiHanamiMessages/message_sub_types.h>
 
 void streamDataCallback(void*,
                         Kitsunemimi::Sakura::Session*,
@@ -69,7 +70,7 @@ handleFail(const std::string &msg,
  * @param blockerId
  */
 inline void
-handleSetCpuSpeedRequest(const Azuki::SetCpuSpeed_Message &msg)
+handleSetCpuSpeedRequest(const SetCpuSpeed_Message &msg)
 {
     // TODO: move the setting of the speed correctly to libKitsunemimiSakuraHardware
     Kitsunemimi::ErrorContainer error;
@@ -83,7 +84,6 @@ handleSetCpuSpeedRequest(const Azuki::SetCpuSpeed_Message &msg)
         LOG_ERROR(error);
         return;
     }
-    std::cout<<"poi3: "<<numberCpuThreads<<std::endl;
 
     if(Kitsunemimi::Cpu::getMinimumSpeed(minimumSpeed, 0, error) == false)
     {
@@ -96,7 +96,7 @@ handleSetCpuSpeedRequest(const Azuki::SetCpuSpeed_Message &msg)
         return;
     }
 
-    if(msg.speedState == Azuki::SetCpuSpeed_Message::SpeedState::MINIMUM_SPEED)
+    if(msg.type() == SpeedState::MINIMUM_SPEED)
     {
         for(uint64_t i = 0; i < numberCpuThreads; i++)
         {
@@ -104,7 +104,7 @@ handleSetCpuSpeedRequest(const Azuki::SetCpuSpeed_Message &msg)
             Kitsunemimi::Cpu::setMaximumSpeed(i, minimumSpeed, error);
         }
     }
-    else if(msg.speedState == Azuki::SetCpuSpeed_Message::SpeedState::MAXIMUM_SPEED)
+    else if(msg.type() == SpeedState::MAXIMUM_SPEED)
     {
         for(uint64_t i = 0; i < numberCpuThreads; i++)
         {
@@ -131,17 +131,17 @@ handleSetCpuSpeedRequest(const Azuki::SetCpuSpeed_Message &msg)
  */
 void
 genericCallback(Kitsunemimi::Sakura::Session* session,
+                const uint32_t subtype,
                 void* data,
                 const uint64_t dataSize,
                 const uint64_t blockerId)
 {
-    u_int8_t* u8Data = static_cast<uint8_t*>(data);
-    switch(u8Data[6])
+    switch(subtype)
     {
-        case Azuki::SET_CPU_SPEED_MESSAGE_TYPE:
+        case AZUKI_SPEED_SET_MESSAGE_TYPE:
             {
-                Azuki::SetCpuSpeed_Message msg;
-                if(msg.read(data, dataSize) == false)
+                SetCpuSpeed_Message msg;
+                if(msg.ParseFromArray(data, dataSize) == false)
                 {
                     handleFail("Receive broken set-cpu-speed-message", session, blockerId);
                     return;
