@@ -38,6 +38,8 @@
 
 #include <libKitsunemimiSakuraHardware/host.h>
 
+#include <libMisakiGuard/misaki_input.h>
+
 using namespace Kitsunemimi::Sakura;
 using Kitsunemimi::Hanami::SupportedComponents;
 using Kitsunemimi::Hanami::HanamiMessaging;
@@ -68,7 +70,7 @@ AzukiRoot::init()
 
     // init internal token for access to other components
     std::string token = "";
-    if(HanamiMessaging::getInstance()->getInternalToken(token, "azuki", error) == false)
+    if(Misaki::getInternalToken(token, "azuki", error) == false)
     {
         error.addMeesage("Failed to get internal token");
         LOG_ERROR(error);
