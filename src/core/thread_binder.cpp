@@ -38,11 +38,10 @@
 #include <libKitsunemimiCommon/threading/thread.h>
 #include <libKitsunemimiCommon/threading/thread_handler.h>
 
-using namespace Kitsunemimi::Sakura;
+using namespace Kitsunemimi::Hanami;
 using Kitsunemimi::Hanami::HanamiMessagingClient;
 using Kitsunemimi::Hanami::HanamiMessaging;
 using Kitsunemimi::Hanami::SupportedComponents;
-using Kitsunemimi::Sakura::SakuraLangInterface;
 
 ThreadBinder::ThreadBinder()
     : Kitsunemimi::Thread("Azuki_ThreadBinder")
@@ -309,11 +308,11 @@ bool
 ThreadBinder::fillCoreIds(std::vector<uint64_t> &controlCoreIds,
                           std::vector<uint64_t> &processingCoreIds)
 {
-    CpuCore* phyCore = nullptr;
+    Kitsunemimi::Sakura::CpuCore* phyCore = nullptr;
 
     // control-cores
     phyCore = AzukiRoot::host->cpuPackages[0]->cpuCores[0];
-    for(CpuThread* singleThread : phyCore->cpuThreads) {
+    for(Kitsunemimi::Sakura::CpuThread* singleThread : phyCore->cpuThreads) {
         controlCoreIds.push_back(singleThread->threadId);
     }
 
@@ -321,7 +320,7 @@ ThreadBinder::fillCoreIds(std::vector<uint64_t> &controlCoreIds,
     for(uint64_t i = 1; i < AzukiRoot::host->cpuPackages[0]->cpuCores.size(); i++)
     {
         phyCore = AzukiRoot::host->cpuPackages[0]->cpuCores[i];
-        for(CpuThread* singleThread : phyCore->cpuThreads) {
+        for(Kitsunemimi::Sakura::CpuThread* singleThread : phyCore->cpuThreads) {
             processingCoreIds.push_back(singleThread->threadId);
         }
     }

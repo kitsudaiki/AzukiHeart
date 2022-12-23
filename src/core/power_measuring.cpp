@@ -31,7 +31,7 @@
 
 #include <libKitsunemimiJson/json_item.h>
 
-using namespace Kitsunemimi::Sakura;
+using namespace Kitsunemimi::Hanami;
 
 PowerMeasuring::PowerMeasuring()
     : Kitsunemimi::Thread("Azuki_EnergyMeasuring")

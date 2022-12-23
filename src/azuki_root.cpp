@@ -40,10 +40,9 @@
 
 #include <libMisakiGuard/misaki_input.h>
 
-using namespace Kitsunemimi::Sakura;
+using namespace Kitsunemimi::Hanami;
 using Kitsunemimi::Hanami::SupportedComponents;
 using Kitsunemimi::Hanami::HanamiMessaging;
-using Kitsunemimi::Sakura::SakuraLangInterface;
 
 std::string* AzukiRoot::componentToken = nullptr;
 ThreadBinder* AzukiRoot::threadBinder = nullptr;

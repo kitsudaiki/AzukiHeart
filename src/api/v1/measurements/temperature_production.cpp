@@ -24,10 +24,10 @@
 #include <azuki_root.h>
 #include <core/temperature_measuring.h>
 
-using namespace Kitsunemimi::Sakura;
+using namespace Kitsunemimi::Hanami;
 
 ThermalProduction::ThermalProduction()
-    : Kitsunemimi::Sakura::Blossom("Request the temperature-measurement of the CPU")
+    : Kitsunemimi::Hanami::Blossom("Request the temperature-measurement of the CPU")
 {
     //----------------------------------------------------------------------------------------------
     // output
