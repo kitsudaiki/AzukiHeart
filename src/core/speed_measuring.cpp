@@ -24,6 +24,8 @@
 #include <azuki_root.h>
 #include <core/value_container.h>
 
+#include <libKitsunemimiSakuraHardware/cpu_thread.h>
+
 #include <libKitsunemimiSakuraHardware/host.h>
 #include <libKitsunemimiSakuraHardware/cpu_core.h>
 #include <libKitsunemimiSakuraHardware/cpu_package.h>
@@ -31,7 +33,7 @@
 
 #include <libKitsunemimiJson/json_item.h>
 
-using namespace Kitsunemimi::Sakura;
+using namespace Kitsunemimi::Hanami;
 
 SpeedMeasuring::SpeedMeasuring()
     : Kitsunemimi::Thread("Azuki_SpeedMeasuring")
@@ -57,7 +59,7 @@ void
 SpeedMeasuring::run()
 {
     Kitsunemimi::ErrorContainer error;
-    CpuThread* thread = nullptr;
+    Kitsunemimi::Sakura::CpuThread* thread = nullptr;
 
     while(m_abort == false)
     {

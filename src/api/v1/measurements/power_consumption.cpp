@@ -24,10 +24,10 @@
 #include <azuki_root.h>
 #include <core/power_measuring.h>
 
-using namespace Kitsunemimi::Sakura;
+using namespace Kitsunemimi::Hanami;
 
 PowerConsumption::PowerConsumption()
-    : Kitsunemimi::Sakura::Blossom("Request the power-measurement of the CPU")
+    : Kitsunemimi::Hanami::Blossom("Request the power-measurement of the CPU")
 {
     //----------------------------------------------------------------------------------------------
     // output

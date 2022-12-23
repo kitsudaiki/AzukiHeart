@@ -31,7 +31,7 @@
 
 #include <libKitsunemimiJson/json_item.h>
 
-using namespace Kitsunemimi::Sakura;
+using namespace Kitsunemimi::Hanami;
 
 TemperatureMeasuring::TemperatureMeasuring()
     : Kitsunemimi::Thread("Azuki_TemperatureMeasuring")

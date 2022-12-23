@@ -23,18 +23,18 @@
 #ifndef AZUKIHEART_TEMPERATURE_PRODUCTION_H
 #define AZUKIHEART_TEMPERATURE_PRODUCTION_H
 
-#include <libKitsunemimiSakuraLang/blossom.h>
+#include <libKitsunemimiHanamiNetwork/blossom.h>
 
 class ThermalProduction
-        : public Kitsunemimi::Sakura::Blossom
+        : public Kitsunemimi::Hanami::Blossom
 {
 public:
     ThermalProduction();
 
 protected:
-    bool runTask(Kitsunemimi::Sakura::BlossomIO &blossomIO,
+    bool runTask(Kitsunemimi::Hanami::BlossomIO &blossomIO,
                  const Kitsunemimi::DataMap &,
-                 Kitsunemimi::Sakura::BlossomStatus &,
+                 Kitsunemimi::Hanami::BlossomStatus &,
                  Kitsunemimi::ErrorContainer &);
 };
 

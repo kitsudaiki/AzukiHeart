@@ -24,10 +24,10 @@
 #include <azuki_root.h>
 #include <core/speed_measuring.h>
 
-using namespace Kitsunemimi::Sakura;
+using namespace Kitsunemimi::Hanami;
 
 Speed::Speed()
-    : Kitsunemimi::Sakura::Blossom("Request the speed of the CPU")
+    : Kitsunemimi::Hanami::Blossom("Request the speed of the CPU")
 {
     //----------------------------------------------------------------------------------------------
     // output

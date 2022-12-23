@@ -27,10 +27,10 @@
 
 #include <libKitsunemimiSakuraHardware/host.h>
 
-using namespace Kitsunemimi::Sakura;
+using namespace Kitsunemimi::Hanami;
 
 GetSystemInfo::GetSystemInfo()
-    : Kitsunemimi::Sakura::Blossom("Get all available information of the local system.\n"
+    : Kitsunemimi::Hanami::Blossom("Get all available information of the local system.\n"
                                    "    - Topology of the cpu-resources\n"
                                    "    - Speed of the cpu")
 {

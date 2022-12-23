@@ -23,10 +23,9 @@
 #ifndef AZUKIHEART_BLOSSOM_INITIALIZING_H
 #define AZUKIHEART_BLOSSOM_INITIALIZING_H
 
-#include <libKitsunemimiSakuraLang/sakura_lang_interface.h>
 #include <libKitsunemimiCommon/logger.h>
 
-#include <libKitsunemimiHanamiEndpoints/endpoint.h>
+#include <libKitsunemimiHanamiNetwork/hanami_messaging.h>
 
 #include <api/v1/system_info/get_system_info.h>
 
@@ -36,37 +35,36 @@
 #include <api/v1/measurements/temperature_production.h>
 #include <api/v1/measurements/speed.h>
 
-using Kitsunemimi::Sakura::SakuraLangInterface;
+using Kitsunemimi::Hanami::HanamiMessaging;
 
 void
 initBlossoms()
 {
-    Kitsunemimi::Hanami::Endpoint* endpoints = Kitsunemimi::Hanami::Endpoint::getInstance();
-    SakuraLangInterface* interface = SakuraLangInterface::getInstance();
+    HanamiMessaging* interface = HanamiMessaging::getInstance();
 
     assert(interface->addBlossom("system", "get_info", new GetSystemInfo()));
-    assert(endpoints->addEndpoint("v1/system_info",
+    assert(interface->addEndpoint("v1/system_info",
                                   Kitsunemimi::Hanami::GET_TYPE,
                                   Kitsunemimi::Hanami::BLOSSOM_TYPE,
                                   "system",
                                   "get_info"));
 
     assert(interface->addBlossom("threading", "get_mapping", new GetThreadMapping()));
-    assert(endpoints->addEndpoint("v1/threading",
+    assert(interface->addEndpoint("v1/threading",
                                   Kitsunemimi::Hanami::GET_TYPE,
                                   Kitsunemimi::Hanami::BLOSSOM_TYPE,
                                   "threading",
                                   "get_mapping"));
 
     assert(interface->addBlossom("measurements", "get_power_consumption", new PowerConsumption()));
-    assert(endpoints->addEndpoint("v1/power_consumption",
+    assert(interface->addEndpoint("v1/power_consumption",
                                   Kitsunemimi::Hanami::GET_TYPE,
                                   Kitsunemimi::Hanami::BLOSSOM_TYPE,
                                   "measurements",
                                   "get_power_consumption"));
 
     assert(interface->addBlossom("measurements", "get_speed", new Speed()));
-    assert(endpoints->addEndpoint("v1/speed",
+    assert(interface->addEndpoint("v1/speed",
                                   Kitsunemimi::Hanami::GET_TYPE,
                                   Kitsunemimi::Hanami::BLOSSOM_TYPE,
                                   "measurements",
@@ -75,7 +73,7 @@ initBlossoms()
     assert(interface->addBlossom("measurements",
                                  "get_temperature_production",
                                  new ThermalProduction()));
-    assert(endpoints->addEndpoint("v1/temperature_production",
+    assert(interface->addEndpoint("v1/temperature_production",
                                   Kitsunemimi::Hanami::GET_TYPE,
                                   Kitsunemimi::Hanami::BLOSSOM_TYPE,
                                   "measurements",

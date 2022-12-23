@@ -23,18 +23,18 @@
 #ifndef AZUKIHEART_POWER_CONSUMPTION_H
 #define AZUKIHEART_POWER_CONSUMPTION_H
 
-#include <libKitsunemimiSakuraLang/blossom.h>
+#include <libKitsunemimiHanamiNetwork/blossom.h>
 
 class PowerConsumption
-        : public Kitsunemimi::Sakura::Blossom
+        : public Kitsunemimi::Hanami::Blossom
 {
 public:
     PowerConsumption();
 
 protected:
-    bool runTask(Kitsunemimi::Sakura::BlossomIO &blossomIO,
+    bool runTask(Kitsunemimi::Hanami::BlossomIO &blossomIO,
                  const Kitsunemimi::DataMap &,
-                 Kitsunemimi::Sakura::BlossomStatus &,
+                 Kitsunemimi::Hanami::BlossomStatus &,
                  Kitsunemimi::ErrorContainer &);
 };
 

@@ -30,12 +30,11 @@
 #include <azuki_root.h>
 #include <core/thread_binder.h>
 
-using namespace Kitsunemimi::Sakura;
+using namespace Kitsunemimi::Hanami;
 using Kitsunemimi::Hanami::SupportedComponents;
-using Kitsunemimi::Sakura::SakuraLangInterface;
 
 GetThreadMapping::GetThreadMapping()
-    : Kitsunemimi::Sakura::Blossom("Get Mapping of the all threads of all components "
+    : Kitsunemimi::Hanami::Blossom("Get Mapping of the all threads of all components "
                                    "to its bound cpu-core")
 {
     //----------------------------------------------------------------------------------------------
