@@ -78,19 +78,19 @@ handleSetCpuSpeedRequest(const SetCpuSpeed_Message &msg)
     uint64_t minimumSpeed = 0;
     uint64_t maximumSpeed = 0;
 
-    if(Kitsunemimi::Cpu::getNumberOfCpuThreads(numberCpuThreads, error) == false)
+    if(Kitsunemimi::getNumberOfCpuThreads(numberCpuThreads, error) == false)
     {
 
         LOG_ERROR(error);
         return;
     }
 
-    if(Kitsunemimi::Cpu::getMinimumSpeed(minimumSpeed, 0, error) == false)
+    if(Kitsunemimi::getMinimumSpeed(minimumSpeed, 0, error) == false)
     {
         LOG_ERROR(error);
         return;
     }
-    if(Kitsunemimi::Cpu::getMaximumSpeed(maximumSpeed, 0, error) == false)
+    if(Kitsunemimi::getMaximumSpeed(maximumSpeed, 0, error) == false)
     {
         LOG_ERROR(error);
         return;
@@ -100,22 +100,22 @@ handleSetCpuSpeedRequest(const SetCpuSpeed_Message &msg)
     {
         for(uint64_t i = 0; i < numberCpuThreads; i++)
         {
-            Kitsunemimi::Cpu::setMinimumSpeed(i, minimumSpeed, error);
-            Kitsunemimi::Cpu::setMaximumSpeed(i, minimumSpeed, error);
+            Kitsunemimi::setMinimumSpeed(i, minimumSpeed, error);
+            Kitsunemimi::setMaximumSpeed(i, minimumSpeed, error);
         }
     }
     else if(msg.type() == SpeedState::MAXIMUM_SPEED)
     {
         for(uint64_t i = 0; i < numberCpuThreads; i++)
         {
-            Kitsunemimi::Cpu::setMinimumSpeed(i, maximumSpeed, error);
-            Kitsunemimi::Cpu::setMaximumSpeed(i, maximumSpeed, error);
+            Kitsunemimi::setMinimumSpeed(i, maximumSpeed, error);
+            Kitsunemimi::setMaximumSpeed(i, maximumSpeed, error);
         }
     }
     else
     {
         for(uint64_t i = 0; i < numberCpuThreads; i++) {
-            Kitsunemimi::Cpu::resetSpeed(i, error);
+            Kitsunemimi::resetSpeed(i, error);
         }
     }
 
