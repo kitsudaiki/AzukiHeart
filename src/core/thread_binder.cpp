@@ -178,7 +178,7 @@ ThreadBinder::requestComponent(Kitsunemimi::DataMap* completeMap,
     }
 
     // parse response
-    Kitsunemimi::Json::JsonItem jsonItem;
+    Kitsunemimi::JsonItem jsonItem;
     if(jsonItem.parse(response.responseContent, error) == false) {
         return false;
     }

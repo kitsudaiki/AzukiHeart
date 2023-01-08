@@ -72,7 +72,7 @@ SpeedMeasuring::run()
              {
                  numberOfValues++;
                  thread = AzukiRoot::host->getPackage(i)->cpuCores.at(j)->cpuThreads.at(0);
-                 currentSpeed += thread->getCurrentSpeed();
+                 currentSpeed += thread->getCurrentThreadSpeed();
              }
         }
 
